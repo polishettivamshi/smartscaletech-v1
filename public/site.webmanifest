@@ -1,0 +1,21 @@
+{
+  "name": "SmartScaleTech",
+  "short_name": "SmartScaleTech",
+  "description": "Hitech City, Hyderabad based agency for ATS resume writing, LinkedIn optimization, UI/UX design, and web development.",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#111111",
+  "background_color": "#111111",
+  "display": "standalone",
+  "start_url": "/"
+}
