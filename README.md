@@ -1,6 +1,6 @@
 # SmartScaleTech
 
-SmartScaleTech is a digital services and career solutions website for businesses, professionals, and graduates. It includes service discovery, portfolio examples, career tools, proposal forms, and the SmartScale Studio Advisor chatbot.
+SmartScaleTech is a digital services and career solutions website for businesses, professionals, and graduates. It includes service discovery, portfolio examples, career tools, proposal forms, and the SmartScaleTech chatbot.
 
 🔗 **Live site:** [smartscaletech](https://smartscaletech.vercel.app)
 
