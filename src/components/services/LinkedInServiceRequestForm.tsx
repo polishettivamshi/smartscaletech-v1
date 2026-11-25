@@ -14,16 +14,17 @@ import {
 import { submitLinkedInServiceRequest, LinkedInServiceRequestPayload } from '../../lib/leads';
 import { StatusBanner } from '../ui/StatusBanner';
 import { Button } from '../ui/Button';
+import { OfferPrice } from '../ui/OfferPrice';
 
 const SERVICE_OPTIONS = [
-  { id: 'Web Development', label: 'Custom Business / SaaS Website', price: 'From ₹4,999' },
-  { id: 'UI/UX Design & Wireframe', label: 'UI/UX Design & Interface System', price: 'From ₹2,499' },
-  { id: 'AI Workflow / Chatbot Integration', label: 'AI Automation & LLM Integration', price: 'From ₹2,999' },
-  { id: 'ATS Resume Writing', label: 'ATS Resume Writing (Word + PDF)', price: '₹499' },
-  { id: 'LinkedIn Profile Optimization', label: 'LinkedIn & Naukri Profile Makeover', price: '₹499' },
-  { id: 'Career Starter Bundle', label: 'Career Starter Bundle (Resume + LinkedIn + Portals)', price: '₹1,500' },
-  { id: 'Portfolio Website', label: 'Portfolio Launch Bundle (Portfolio + ATS Resume)', price: '₹3,000' },
-  { id: 'Final Year Project', label: 'Final Year Project (Code + Report + Viva)', price: '₹2,999' },
+  { id: 'Web Development', label: 'Custom Business / SaaS Website', price: 'From ₹7,999', standardPrice: 9999, offerPrice: 7999 },
+  { id: 'UI/UX Design & Wireframe', label: 'UI/UX Design & Interface System', price: 'From ₹3,199', standardPrice: 3999, offerPrice: 3199 },
+  { id: 'AI Workflow / Chatbot Integration', label: 'AI Automation & LLM Integration', price: 'From ₹6,399', standardPrice: 7999, offerPrice: 6399 },
+  { id: 'ATS Resume Writing', label: 'ATS Resume Writing (Word + PDF)', price: '₹239', standardPrice: 299, offerPrice: 239 },
+  { id: 'LinkedIn Profile Optimization', label: 'LinkedIn & Naukri Profile Makeover', price: 'From ₹319', standardPrice: 399, offerPrice: 319 },
+  { id: 'Career Starter Bundle', label: 'Career Starter Bundle (Resume + LinkedIn + Portals)', price: '₹899', standardPrice: 1046, offerPrice: 899 },
+  { id: 'Portfolio Website', label: 'Portfolio Launch Bundle (Portfolio + ATS Resume)', price: '₹1,999', standardPrice: 2246, offerPrice: 1999 },
+  { id: 'Final Year Project', label: 'Final Year Project (Code + Report + Viva)', price: 'From ₹3,999', standardPrice: 4999, offerPrice: 3999 },
 ];
 
 const EXPERIENCE_LEVELS = [
@@ -41,9 +42,9 @@ const TIMELINE_OPTIONS = [
 
 const BUDGET_OPTIONS = [
   '₹0 (Free Scope Audit & Quote)',
-  '₹299 – ₹999 (Single Career Item)',
-  '₹1,500 – ₹3,000 (Career or Portfolio Bundle)',
-  '₹4,999 – ₹6,000 (Business Web & Technical SEO)',
+  '₹159 – ₹3,999 (Single Career or Project Item)',
+  '₹899 – ₹1,999 (Career or Portfolio Bundle)',
+  '₹1,599 – ₹7,999 (Business & Marketing Services)',
   'Custom Scope / Software Project',
 ];
 
@@ -237,7 +238,8 @@ export const LinkedInServiceRequestForm: React.FC<LinkedInServiceRequestFormProp
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#EAE3D5] mb-8">
         <div>
           <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#D9541E] mb-1">
-            Free Scope Consultation · Packages from ₹299
+            Free Scope Consultation · Packages from{' '}
+            <OfferPrice standardPrice={199} offerPrice={159} startingFrom compact />
           </p>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#111111]">
             Project &amp; Career Brief
@@ -271,7 +273,18 @@ export const LinkedInServiceRequestForm: React.FC<LinkedInServiceRequestFormProp
                 >
                   <div>
                     <div className="font-bold text-sm text-[#111111] leading-snug">{srv.label}</div>
-                    <div className="text-xs text-[#57534E] mt-0.5 tabular-nums">{srv.price}</div>
+                    <div className="mt-1">
+                      {srv.standardPrice && srv.offerPrice ? (
+                        <OfferPrice
+                          standardPrice={srv.standardPrice}
+                          offerPrice={srv.offerPrice}
+                          startingFrom={srv.price.startsWith('From ')}
+                          compact
+                        />
+                      ) : (
+                        <span className="text-xs text-[#57534E] tabular-nums">{srv.price}</span>
+                      )}
+                    </div>
                   </div>
                   {isSelected && (
                     <div className="w-5 h-5 rounded-full bg-[#D9541E] text-white flex items-center justify-center shrink-0 mt-0.5">

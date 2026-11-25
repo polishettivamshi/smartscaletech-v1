@@ -11,9 +11,16 @@ interface PaymentModalProps {
   onClose: () => void;
   planName: string;
   amount: string;
+  standardAmount?: string;
 }
 
-export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModalProps) => {
+export const PaymentModal = ({
+  isOpen,
+  onClose,
+  planName,
+  amount,
+  standardAmount,
+}: PaymentModalProps) => {
   const [copied, setCopied] = useState(false);
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
@@ -22,6 +29,11 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
   const [emailError, setEmailError] = useState<string | null>(null);
 
   const numericAmount = amount.replace(/[^0-9]/g, '') || '1500';
+  const numericStandardAmount = standardAmount?.replace(/[^0-9]/g, '');
+  const paymentSaving =
+    numericStandardAmount && Number(numericStandardAmount) > Number(numericAmount)
+      ? Number(numericStandardAmount) - Number(numericAmount)
+      : 0;
   const upiId = (import.meta as { env?: Record<string, string> }).env?.VITE_UPI_ID || 'polishettivamshi123@ybl';
   const payeeName = 'SmartScaleTech';
   const transactionNote = encodeURIComponent(`SmartScaleTech ${planName}`);
@@ -77,16 +89,28 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
     >
       <div className="p-6 space-y-5">
       {emailError && <StatusBanner tone="error">{emailError}</StatusBanner>}
-      <div className="flex items-center justify-between p-4 rounded-xl bg-[#F3EEE3]/70 border border-[#D8D3C9]">
+      <div className="flex items-center justify-between p-4 rounded-xl bg-cream/70 border border-border-hairline">
           <div>
             <span className="text-[11px] font-bold uppercase text-[#D9541E] tracking-wider block">
               Selected Package
             </span>
-            <p className="text-base font-extrabold text-[#111111] mt-0.5">{planName}</p>
+            <p className="text-base font-extrabold text-carbon mt-0.5">{planName}</p>
           </div>
           <div className="text-right tabular-nums">
-            <span className="text-2xl font-extrabold text-[#111111]">₹{numericAmount}</span>
-            <span className="block text-[10px] font-bold text-[#57534E] uppercase">
+            {paymentSaving > 0 && (
+              <span className="block text-xs font-medium text-[#78716C] line-through">
+                ₹{Number(numericStandardAmount).toLocaleString('en-IN')}
+              </span>
+            )}
+            <span className="text-2xl font-extrabold text-[#D9541E]">
+              ₹{Number(numericAmount).toLocaleString('en-IN')}
+            </span>
+            {paymentSaving > 0 && (
+              <span className="block text-[10px] font-bold text-[#D9541E]">
+                Save ₹{paymentSaving.toLocaleString('en-IN')}
+              </span>
+            )}
+            <span className="block text-[10px] font-bold text-muted-accessible uppercase">
               One-Time / Advance
             </span>
           </div>
@@ -96,7 +120,7 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <label htmlFor="pay-name" className="font-bold text-[#111111] block mb-1">
+                <label htmlFor="pay-name" className="font-bold text-carbon block mb-1">
                   Your Name
                 </label>
                 <input
@@ -105,11 +129,11 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Enter your name"
-                  className="w-full h-10 px-3 bg-[#F3EEE3]/45 border border-[#D8D3C9] rounded-xl font-medium text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                  className="w-full h-10 px-3 bg-cream/45 border border-border-hairline rounded-xl font-medium text-carbon focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
                 />
               </div>
               <div>
-                <label htmlFor="pay-phone" className="font-bold text-[#111111] block mb-1">
+                <label htmlFor="pay-phone" className="font-bold text-carbon block mb-1">
                   WhatsApp Number
                 </label>
                 <input
@@ -118,16 +142,16 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="9000859695"
-                  className="w-full h-10 px-3 bg-[#F3EEE3]/45 border border-[#D8D3C9] rounded-xl font-medium text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                  className="w-full h-10 px-3 bg-cream/45 border border-border-hairline rounded-xl font-medium text-carbon focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
                 />
               </div>
             </div>
 
-            <div className="text-center p-5 rounded-xl bg-[#F3EEE3]/45 border border-[#D8D3C9]">
-              <p className="text-xs font-bold text-[#111111] mb-3 flex items-center justify-center gap-1.5">
+            <div className="text-center p-5 rounded-xl bg-cream/45 border border-border-hairline">
+              <p className="text-xs font-bold text-carbon mb-3 flex items-center justify-center gap-1.5">
                 <QrCode size={15} className="text-[#D9541E]" /> Scan with GPay / PhonePe / Paytm / BHIM
               </p>
-              <div className="inline-block p-2.5 bg-white rounded-xl border border-[#D8D3C9]">
+              <div className="inline-block p-2.5 bg-white rounded-xl border border-border-hairline">
                 <img
                   src={qrCodeUrl}
                   alt="UPI Payment QR Code"
@@ -136,8 +160,8 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
               </div>
 
               <div className="mt-3 flex items-center justify-center gap-2 text-xs">
-                <span className="text-[#57534E] font-medium">UPI ID:</span>
-                <code className="font-mono font-bold text-[#111111] bg-white px-2.5 py-1 rounded border border-[#D8D3C9]">
+                <span className="text-muted-accessible font-medium">UPI ID:</span>
+                <code className="font-mono font-bold text-carbon bg-white px-2.5 py-1 rounded border border-border-hairline">
                   {upiId}
                 </code>
                 <button
@@ -145,16 +169,16 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
                   onClick={handleCopyUpi}
                   className="text-[#D9541E] font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
                 >
-                  {copied ? <Check size={14} className="text-[#16845B]" /> : <Copy size={13} />}
+                  {copied ? <Check size={14} className="text-success" /> : <Copy size={13} />}
                   {copied ? 'Copied' : 'Copy'}
                 </button>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-[#D8D3C9] flex flex-col sm:flex-row gap-2.5">
+              <div className="mt-4 pt-4 border-t border-border-hairline flex flex-col sm:flex-row gap-2.5">
                 <a
                   href={upiUri}
                   onClick={handlePaymentInitiated}
-                  className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-4 rounded-xl bg-[#D9541E] hover:bg-[#B94414] text-white font-semibold text-xs transition-colors"
+                  className="flex-1 inline-flex items-center justify-center gap-2 h-11 px-4 rounded-xl bg-[#D9541E] hover:bg-primary-dark text-white font-semibold text-xs transition-colors"
                 >
                   <Smartphone size={15} /> Open UPI App
                 </a>
@@ -171,13 +195,13 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
             </div>
           </>
         ) : (
-          <div className="p-6 rounded-xl bg-[#16845B]/8 border border-[#16845B]/30 text-center space-y-4">
-            <div className="h-12 w-12 rounded-full bg-[#16845B]/15 text-[#16845B] flex items-center justify-center mx-auto">
+          <div className="p-6 rounded-xl bg-success/8 border border-success/30 text-center space-y-4">
+            <div className="h-12 w-12 rounded-full bg-success/15 text-success flex items-center justify-center mx-auto">
               <Check size={24} />
             </div>
             <div>
-              <h4 className="text-base font-extrabold text-[#111111]">Confirm Screenshot on WhatsApp</h4>
-              <p className="text-xs text-[#57534E] mt-1 leading-relaxed">
+              <h4 className="text-base font-extrabold text-carbon">Confirm Screenshot on WhatsApp</h4>
+              <p className="text-xs text-muted-accessible mt-1 leading-relaxed">
                 Send your transaction screenshot on WhatsApp so we verify receipt and start Phase 01
                 immediately.
               </p>
@@ -186,16 +210,16 @@ export const PaymentModal = ({ isOpen, onClose, planName, amount }: PaymentModal
               href={confirmWhatsAppUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-[#111111] hover:bg-[#D9541E] text-white font-semibold text-xs transition-colors"
+              className="inline-flex items-center justify-center gap-2 w-full h-11 rounded-xl bg-carbon hover:bg-[#D9541E] text-white font-semibold text-xs transition-colors"
             >
               <MessageCircle size={16} /> Send Payment Confirmation
             </a>
           </div>
         )}
 
-        <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] font-medium text-[#57534E]">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] font-medium text-muted-accessible">
           <span className="inline-flex items-center gap-1">
-            <ShieldCheck size={14} className="text-[#16845B]" /> Direct UPI · Zero Gateway Markup
+            <ShieldCheck size={14} className="text-success" /> Direct UPI · Zero Gateway Markup
           </span>
           <span>·</span>
           <span>Receipt issued on WhatsApp</span>

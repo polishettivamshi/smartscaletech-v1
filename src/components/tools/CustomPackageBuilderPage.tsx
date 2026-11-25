@@ -124,10 +124,12 @@ export const CustomPackageBuilderPage = () => {
 
   const whatsappUrl = useMemo(() => {
     const lines = totals.selectedServices.map(
-      (s, i) => `${i + 1}. ${s.name} (₹${s.price.toLocaleString('en-IN')})`
+      (s, i) =>
+        `${i + 1}. ${s.name} (₹${s.standardPrice.toLocaleString('en-IN')} → ₹${s.price.toLocaleString('en-IN')}, Save ₹${(s.standardPrice - s.price).toLocaleString('en-IN')})`
     );
     const addonLines = selectedAddonsList.map(
-      (a) => `+ Add-on: ${a.name} (₹${a.price.toLocaleString('en-IN')})`
+      (a) =>
+        `+ Add-on: ${a.name} (₹${a.standardPrice.toLocaleString('en-IN')} → ₹${a.price.toLocaleString('en-IN')}, Save ₹${(a.standardPrice - a.price).toLocaleString('en-IN')})`
     );
     return `https://wa.me/919000859695?text=${encodeURIComponent(
       `Hello SmartScaleTech,\n\nI configured a custom bundle:\n\n${lines.join('\n')}${
@@ -136,7 +138,7 @@ export const CustomPackageBuilderPage = () => {
         'en-IN'
       )}\nBundle Discount (${Math.round(totals.discountRate * 100)}%): -₹${totals.discountAmount.toLocaleString(
         'en-IN'
-      )}\nAdd-Ons: ₹${totals.addonsTotal.toLocaleString('en-IN')}\n*Final Bundle Total: ₹${totals.finalTotal.toLocaleString(
+      )}\nAdd-Ons: ₹${totals.addonsTotal.toLocaleString('en-IN')}\nTotal Savings: ₹${totals.totalSavings.toLocaleString('en-IN')}\n*Final Bundle Total: ₹${totals.finalTotal.toLocaleString(
         'en-IN'
       )}*\n\nName: ${name || '-'}\nPhone: ${phone || '-'}\nEmail: ${email || '-'}`
     )}`;
@@ -273,12 +275,15 @@ export const CustomPackageBuilderPage = () => {
             <section className="bg-white border border-[#D8D3C9] rounded-2xl p-6 sm:p-7 space-y-5">
               <div className="flex items-center justify-between">
                 <h2 className="text-base sm:text-lg font-extrabold text-[#111111]">
-                  Step 2 · Select Core Services
+                  Exclusive Startup Launch Offer
                 </h2>
                 <span className="text-xs font-bold text-[#D9541E] tabular-nums">
                   {totals.selectedServices.length} selected
                 </span>
               </div>
+              <p className="text-sm font-semibold text-[#57534E]">
+                Step 2 · Select Core Services
+              </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {visibleServices.map((service) => {
@@ -316,10 +321,24 @@ export const CustomPackageBuilderPage = () => {
                         <p className="text-xs text-[#57534E] leading-relaxed">{service.desc}</p>
                       </div>
 
-                      <div className="flex items-center justify-between pt-2.5 border-t border-[#EAE3D5] tabular-nums">
-                        <span className="text-base font-extrabold text-[#111111]">
-                          ₹{service.price.toLocaleString('en-IN')}
-                        </span>
+                      <div className="flex flex-wrap items-end justify-between gap-2 pt-2.5 border-t border-[#EAE3D5] tabular-nums">
+                        <div className="space-y-1">
+                          <span className="inline-flex rounded-full bg-[#D9541E]/10 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#D9541E]">
+                            20% OFF
+                          </span>
+                          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+                            <span className="text-xs font-medium text-[#78716C] line-through">
+                              ₹{service.standardPrice.toLocaleString('en-IN')}
+                            </span>
+                            <span className="text-base font-extrabold text-[#D9541E]">
+                              {service.category !== 'Career Branding' ? 'Starting from ' : ''}
+                              ₹{service.price.toLocaleString('en-IN')}
+                            </span>
+                          </div>
+                          <span className="block text-[10px] font-semibold text-[#D9541E]">
+                            Save ₹{(service.standardPrice - service.price).toLocaleString('en-IN')}
+                          </span>
+                        </div>
                         <span className="text-[11px] font-medium text-[#57534E]">
                           {service.turnaround}
                         </span>
@@ -364,8 +383,19 @@ export const CustomPackageBuilderPage = () => {
                           {addon.name}
                         </span>
                       </div>
-                      <span className="text-sm font-extrabold text-[#111111] tabular-nums shrink-0">
-                        +₹{addon.price}
+                      <span className="flex flex-col items-end gap-1 tabular-nums shrink-0">
+                        <span className="rounded-full bg-[#D9541E]/10 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#D9541E]">
+                          20% OFF
+                        </span>
+                        <span className="text-xs font-medium text-[#78716C] line-through">
+                          ₹{addon.standardPrice.toLocaleString('en-IN')}
+                        </span>
+                        <span className="text-sm font-extrabold text-[#D9541E]">
+                          +₹{addon.price.toLocaleString('en-IN')}
+                        </span>
+                        <span className="text-[10px] font-semibold text-[#D9541E]">
+                          Save ₹{(addon.standardPrice - addon.price).toLocaleString('en-IN')}
+                        </span>
                       </span>
                     </button>
                   );
@@ -538,16 +568,28 @@ export const CustomPackageBuilderPage = () => {
                     {totals.selectedServices.map((item) => (
                       <li key={item.id} className="flex items-start justify-between gap-2 text-white/85">
                         <span className="leading-snug">{item.name}</span>
-                        <span className="font-bold text-white tabular-nums shrink-0">
-                          ₹{item.price.toLocaleString('en-IN')}
+                        <span className="flex flex-col items-end font-bold text-white tabular-nums shrink-0">
+                          <span className="text-white/50 line-through">
+                            ₹{item.standardPrice.toLocaleString('en-IN')}
+                          </span>
+                          <span>₹{item.price.toLocaleString('en-IN')}</span>
+                          <span className="text-[10px] text-[#F06B37]">
+                            Save ₹{(item.standardPrice - item.price).toLocaleString('en-IN')}
+                          </span>
                         </span>
                       </li>
                     ))}
                     {selectedAddonsList.map((addon) => (
                       <li key={addon.id} className="flex items-start justify-between gap-2 text-[#E87A4E]">
                         <span className="leading-snug">+ {addon.name}</span>
-                        <span className="font-bold tabular-nums shrink-0">
-                          ₹{addon.price.toLocaleString('en-IN')}
+                        <span className="flex flex-col items-end font-bold tabular-nums shrink-0">
+                          <span className="text-white/50 line-through">
+                            ₹{addon.standardPrice.toLocaleString('en-IN')}
+                          </span>
+                          <span>₹{addon.price.toLocaleString('en-IN')}</span>
+                          <span className="text-[10px]">
+                            Save ₹{(addon.standardPrice - addon.price).toLocaleString('en-IN')}
+                          </span>
                         </span>
                       </li>
                     ))}
@@ -566,6 +608,10 @@ export const CustomPackageBuilderPage = () => {
                           : 'Pick 2+ to save'}
                       </span>
                     </div>
+                    <div className="flex justify-between text-[#F06B37] font-bold">
+                      <span>Total Savings</span>
+                      <span>Save ₹{totals.totalSavings.toLocaleString('en-IN')}</span>
+                    </div>
                     {totals.addonsTotal > 0 && (
                       <div className="flex justify-between text-white/65">
                         <span>Optional Add-Ons</span>
@@ -574,8 +620,13 @@ export const CustomPackageBuilderPage = () => {
                     )}
                     <div className="flex justify-between items-baseline pt-3 border-t border-white/15">
                       <span className="text-sm font-bold text-white/85">Estimated Total</span>
-                      <span className="text-3xl font-extrabold text-white">
-                        ₹{totals.finalTotal.toLocaleString('en-IN')}
+                      <span className="text-right">
+                        <span className="block text-xs text-white/50 line-through">
+                          ₹{(totals.finalTotal + totals.totalSavings).toLocaleString('en-IN')}
+                        </span>
+                        <span className="block text-3xl font-extrabold text-white">
+                          ₹{totals.finalTotal.toLocaleString('en-IN')}
+                        </span>
                       </span>
                     </div>
                   </div>
@@ -625,13 +676,41 @@ export const CustomPackageBuilderPage = () => {
             {totals.selectedServices.map((s) => (
               <div key={s.id} className="flex justify-between gap-2 text-white/85">
                 <span className="truncate">{s.name}</span>
-                <span className="tabular-nums">₹{s.price.toLocaleString('en-IN')}</span>
+                <span className="tabular-nums text-right">
+                  <span className="block text-white/50 line-through">
+                    ₹{s.standardPrice.toLocaleString('en-IN')}
+                  </span>
+                  <span className="block">₹{s.price.toLocaleString('en-IN')}</span>
+                  <span className="block text-[10px] text-[#F06B37]">
+                    Save ₹{(s.standardPrice - s.price).toLocaleString('en-IN')}
+                  </span>
+                </span>
+              </div>
+            ))}
+            {selectedAddonsList.map((addon) => (
+              <div key={addon.id} className="flex justify-between gap-2 text-white/85">
+                <span className="truncate">+ {addon.name}</span>
+                <span className="tabular-nums text-right">
+                  <span className="block text-white/50 line-through">
+                    ₹{addon.standardPrice.toLocaleString('en-IN')}
+                  </span>
+                  <span className="block">₹{addon.price.toLocaleString('en-IN')}</span>
+                  <span className="block text-[10px] text-[#F06B37]">
+                    Save ₹{(addon.standardPrice - addon.price).toLocaleString('en-IN')}
+                  </span>
+                </span>
               </div>
             ))}
             {totals.discountAmount > 0 && (
               <div className="flex justify-between text-[#34D399] font-bold">
                 <span>Bundle Savings ({Math.round(totals.discountRate * 100)}%)</span>
                 <span>-₹{totals.discountAmount.toLocaleString('en-IN')}</span>
+              </div>
+            )}
+            {totals.totalSavings > 0 && (
+              <div className="flex justify-between text-[#F06B37] font-bold">
+                <span>Total Savings</span>
+                <span>Save ₹{totals.totalSavings.toLocaleString('en-IN')}</span>
               </div>
             )}
           </div>
@@ -648,7 +727,13 @@ export const CustomPackageBuilderPage = () => {
                 {totals.selectedServices.length} items · {Math.round(totals.discountRate * 100)}% off
               </span>
               <span className="text-lg font-extrabold tabular-nums">
+                <span className="block text-xs text-white/50 line-through">
+                  ₹{(totals.finalTotal + totals.totalSavings).toLocaleString('en-IN')}
+                </span>
                 ₹{totals.finalTotal.toLocaleString('en-IN')}
+                <span className="block text-[10px] text-[#F06B37]">
+                  Save ₹{totals.totalSavings.toLocaleString('en-IN')}
+                </span>
               </span>
             </div>
             {mobileDrawerOpen ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
@@ -681,6 +766,7 @@ export const CustomPackageBuilderPage = () => {
           onClose={() => setIsPaymentOpen(false)}
           planName={`Custom Bundle (${totals.selectedServices.length} Services)`}
           amount={totals.finalTotal.toString()}
+          standardAmount={(totals.finalTotal + totals.totalSavings).toString()}
         />
       )}
     </main>

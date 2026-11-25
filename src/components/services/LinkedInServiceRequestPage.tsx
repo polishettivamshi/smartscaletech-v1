@@ -2,6 +2,7 @@ import React from 'react';
 import { Linkedin, MessageCircle } from 'lucide-react';
 import { LinkedInServiceRequestForm } from './LinkedInServiceRequestForm';
 import { Breadcrumb } from '../ui/Breadcrumb';
+import { OfferPrice } from '../ui/OfferPrice';
 
 export const LinkedInServiceRequestPage: React.FC = () => {
   return (
@@ -38,7 +39,9 @@ export const LinkedInServiceRequestPage: React.FC = () => {
               <span className="block text-[10px] uppercase tracking-wider text-[#57534E] font-medium">
                 Single Services
               </span>
-              <span className="mt-0.5 block">From ₹299</span>
+              <span className="mt-0.5 block">
+                <OfferPrice standardPrice={199} offerPrice={159} startingFrom compact />
+              </span>
             </div>
             <div className="p-3.5 bg-white rounded-xl border border-[#D8D3C9]">
               <span className="block text-[10px] uppercase tracking-wider text-[#57534E] font-medium">

@@ -5,14 +5,15 @@ import { Button } from '../ui/Button';
 import { SectionHeading } from '../ui/SectionHeading';
 import { BookingModal } from './BookingModal';
 import { PaymentModal } from './PaymentModal';
+import { OfferPrice } from '../ui/OfferPrice';
 
 const plans = [
   {
     name: 'Career Starter',
     scope: 'Resume, LinkedIn & Job Portals',
-    originalSubtotal: '1,896',
-    oneTimePrice: '1,500',
-    bundleNote: '21% Bundle Savings · Save ₹396',
+    originalSubtotal: '1,046',
+    oneTimePrice: '899',
+    bundleNote: '14% Bundle Savings · Save ₹147',
     features: [
       'Role-Specific ATS Resume (Word + PDF)',
       'LinkedIn Profile & Headline Rewrite',
@@ -26,9 +27,9 @@ const plans = [
   {
     name: 'Portfolio Launch',
     scope: 'Website + Career Branding Bundle',
-    originalSubtotal: '3,396',
-    oneTimePrice: '3,000',
-    bundleNote: '12% Bundle Savings · Save ₹396',
+    originalSubtotal: '2,246',
+    oneTimePrice: '1,999',
+    bundleNote: '11% Bundle Savings · Save ₹247',
     features: [
       'Custom Responsive Portfolio Website',
       'Full ATS Resume Writing Included',
@@ -42,9 +43,9 @@ const plans = [
   {
     name: 'Business Web',
     scope: 'Company Website & Technical SEO',
-    originalSubtotal: '6,998',
-    oneTimePrice: '6,000',
-    bundleNote: '14% Bundle Savings · Save ₹998',
+    originalSubtotal: '5,498',
+    oneTimePrice: '4,999',
+    bundleNote: '9% Bundle Savings · Save ₹499',
     features: [
       'Up to 5 Custom Designed Responsive Pages',
       'WhatsApp Lead Capture & Inquiry Forms',
@@ -59,7 +60,11 @@ const plans = [
 
 export const Pricing = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [paymentPlan, setPaymentPlan] = useState<{ name: string; amount: string } | null>(null);
+  const [paymentPlan, setPaymentPlan] = useState<{
+    name: string;
+    amount: string;
+    standardAmount: string;
+  } | null>(null);
   const [trackFilter, setTrackFilter] = useState<'all' | 'job-seekers' | 'business'>('all');
 
   const visiblePlans = plans.filter((plan) => {
@@ -204,6 +209,7 @@ export const Pricing = () => {
                     setPaymentPlan({
                       name: plan.name,
                       amount: plan.oneTimePrice,
+                      standardAmount: plan.originalSubtotal,
                     })
                   }
                 >
@@ -233,7 +239,10 @@ export const Pricing = () => {
               <ShieldCheck size={15} className="text-[#16845B]" /> One-time milestone payment
             </span>
             <span>UPI (GPay / PhonePe / Paytm)</span>
-            <span>Need single items from ₹299?</span>
+            <span className="inline-flex items-center gap-1">
+              Need single items from{' '}
+              <OfferPrice standardPrice={199} offerPrice={159} startingFrom compact />?
+            </span>
           </div>
 
           <Link
@@ -278,6 +287,7 @@ export const Pricing = () => {
         onClose={() => setPaymentPlan(null)}
         planName={paymentPlan?.name || ''}
         amount={paymentPlan?.amount || '1500'}
+        standardAmount={paymentPlan?.standardAmount}
       />
     </section>
   );

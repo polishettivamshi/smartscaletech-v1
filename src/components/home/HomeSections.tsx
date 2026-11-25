@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Code2, PencilRuler, Rocket, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SectionHeading } from '../ui/SectionHeading';
 import { Button } from '../ui/Button';
@@ -10,6 +10,7 @@ export const HowItWorks = () => {
     {
       stepNum: '01',
       label: 'Discover',
+      Icon: Search,
       timing: 'Day 1 · 10-Min Brief',
       name: 'Scope, Goals & Audit',
       deliverable: 'Clear Project Brief',
@@ -19,6 +20,7 @@ export const HowItWorks = () => {
     {
       stepNum: '02',
       label: 'Plan & Design',
+      Icon: PencilRuler,
       timing: 'Hour 12 · Structure',
       name: 'Wireframe & Keyword Map',
       deliverable: 'Draft Architecture',
@@ -28,6 +30,7 @@ export const HowItWorks = () => {
     {
       stepNum: '03',
       label: 'Build & Refine',
+      Icon: Code2,
       timing: 'Hour 24–36 · Iteration',
       name: 'Development & 1-on-1 Polish',
       deliverable: 'Reviewed Staging Build',
@@ -37,6 +40,7 @@ export const HowItWorks = () => {
     {
       stepNum: '04',
       label: 'Deliver & Support',
+      Icon: Rocket,
       timing: 'Hour 48 · Handover',
       name: 'Final Assets & Live Deploy',
       deliverable: 'Full Source & Files',
@@ -73,10 +77,15 @@ export const HowItWorks = () => {
               className="flex flex-col justify-between p-6 sm:p-7 bg-white rounded-2xl border border-[#D8D3C9] hover:border-[#111111]/40 transition-colors"
             >
               <div>
-                <div className="flex items-center justify-between gap-3 pb-4 mb-5 border-b border-[#EAE3D5]">
+                <div className="mb-5 flex items-center gap-3">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#F3EEE3] text-[#D9541E]">
+                  <step.Icon size={22} strokeWidth={1.8} aria-hidden="true" />
+                  </div>
                   <span className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#D9541E] tabular-nums">
                     {step.stepNum} — {step.label}
                   </span>
+                </div>
+                <div className="flex items-center justify-between gap-3 pb-4 mb-5 border-b border-[#EAE3D5]">
                   <span className="text-[11px] font-medium text-[#57534E] tabular-nums">
                     {step.timing}
                   </span>

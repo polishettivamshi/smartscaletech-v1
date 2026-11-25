@@ -15,11 +15,13 @@ import {
   WHATSAPP_URL,
   StructuredServiceEntry,
 } from '../../data/serviceCatalog';
+import { SERVICE_CATALOG } from '../../data/bundleCatalog';
 import { getServiceVisualBySlug } from '../../data/serviceTransformations';
 import { Breadcrumb } from '../ui/Breadcrumb';
 import { Button } from '../ui/Button';
 import { Accordion } from '../ui/Accordion';
 import { NotFound } from '../layout/NotFound';
+import { OfferPrice } from '../ui/OfferPrice';
 
 const PHONE = '+919000859695';
 
@@ -82,6 +84,10 @@ export const ServicePage = ({ slug }: Props) => {
 
   const previewImg = visual?.image || entry.previewImage;
   const previewAlt = visual?.imageAlt || entry.previewAlt;
+  const offer = SERVICE_CATALOG.find((item) => item.id === entry.offerServiceId);
+  const displayOffer = offer
+    ? { standardPrice: offer.standardPrice, offerPrice: offer.price }
+    : entry.priceOffer;
 
   return (
     <main className="bg-[#F3EEE3] text-[#111111]">
@@ -141,11 +147,21 @@ export const ServicePage = ({ slug }: Props) => {
               <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#57534E]">
                 Starting Rate / Scope
               </p>
-              <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-[#111111] tabular-nums">
-                {entry.priceTag}
-              </p>
+              {displayOffer ? (
+                <div className="mt-2">
+                  <OfferPrice
+                    standardPrice={displayOffer.standardPrice}
+                    offerPrice={displayOffer.offerPrice}
+                    startingFrom={entry.categoryLabel !== 'Career Branding'}
+                  />
+                </div>
+              ) : (
+                <p className="mt-2 text-2xl sm:text-3xl font-extrabold text-[#111111] tabular-nums">
+                  {entry.priceTag}
+                </p>
+              )}
               <p className="mt-2 text-xs text-[#57534E] leading-relaxed">
-                {entry.pricingSummary}
+                {displayOffer ? 'Exclusive Startup Launch Offer · 20% OFF' : entry.pricingSummary}
               </p>
               <div className="mt-4 pt-4 border-t border-[#EAE3D5] flex items-center justify-between text-xs font-semibold text-[#111111]">
                 <span>Hitech City &amp; Remote</span>
@@ -363,7 +379,20 @@ export const ServicePage = ({ slug }: Props) => {
             <h2 className="text-xl sm:text-2xl font-extrabold text-[#111111] mb-3">
               Transparent scope, zero lock-in
             </h2>
-            <p className="text-sm text-[#57534E] leading-relaxed mb-6">{entry.pricingSummary}</p>
+            {displayOffer ? (
+              <div className="mb-6 space-y-2">
+                <OfferPrice
+                  standardPrice={displayOffer.standardPrice}
+                  offerPrice={displayOffer.offerPrice}
+                  startingFrom={entry.categoryLabel !== 'Career Branding'}
+                />
+                <p className="text-sm text-[#57534E] leading-relaxed">
+                  Exclusive Startup Launch Offer · 20% OFF
+                </p>
+              </div>
+            ) : (
+              <p className="text-sm text-[#57534E] leading-relaxed mb-6">{entry.pricingSummary}</p>
+            )}
             <div className="flex flex-wrap gap-3">
               <Link to="/custom-package-builder">
                 <Button variant="primary" size="md">

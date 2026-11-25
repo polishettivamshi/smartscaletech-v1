@@ -1,3 +1,8 @@
+import nodemailer from 'nodemailer';
+import { readFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
+import path from 'node:path';
+
 const EMAIL_FIELDS: Array<[string, string, number]> = [
   ['Name', 'name', 120],
   ['Email', 'email', 160],
@@ -34,16 +39,44 @@ const escapeHtml = (value: string): string =>
     return entities[character];
   });
 
+const isEnabled = (value: string | undefined): boolean =>
+  value?.toLowerCase() === 'true';
+
 export async function sendLeadEmail(
   data: Record<string, unknown>,
   type: string
 ): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM;
-  const to = process.env.EMAIL_TO || 'smartscaletechforyou@gmail.com';
-  if (!apiKey || !from) {
-    throw new Error('Email delivery is not configured');
+  const mailer = process.env.MAILER || 'smtp';
+  const username = process.env.MAIL_USERNAME;
+  const password = process.env.MAIL_PASSWORD?.replace(/\s/g, '');
+  const host = process.env.MAIL_HOST || 'smtp.gmail.com';
+  const port = Number(process.env.MAIL_PORT || 587);
+  const encryption = (process.env.MAIL_ENCRYPTION || 'tls').toLowerCase();
+  const from = process.env.MAIL_FROM || username;
+  const fromName = process.env.MAIL_FROM_NAME || 'Smart Scale Tech';
+  const to = process.env.EMAIL_TO || username;
+
+  if (mailer !== 'smtp') {
+    throw new Error('Unsupported mailer configuration');
   }
+  if (!username || !password || !from || !to) {
+    throw new Error('SMTP email delivery is not configured');
+  }
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error('Invalid SMTP port configuration');
+  }
+
+  const secure = encryption === 'ssl' || port === 465;
+  const requireTLS = !secure && (
+    isEnabled(process.env.SMTP_USE_TLS) || encryption === 'tls'
+  );
+  const transporter = nodemailer.createTransport({
+    host,
+    port,
+    secure,
+    requireTLS,
+    auth: { user: username, pass: password },
+  });
 
   const values = EMAIL_FIELDS
     .map(([label, key, maxLength]) =>
@@ -54,6 +87,8 @@ export async function sendLeadEmail(
   const service = cleanField(data.service, 160).replace(/[\r\n]+/g, ' ') || 'General inquiry';
   const replyTo = cleanField(data.email, 160);
   const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  const logo = await readFile(path.resolve(process.cwd(), 'public', 'logo.png'));
+  const logoCid = `smartscaletech-logo-${randomUUID()}@smartscaletech`;
   const rows = values.map(([label, value]) => `
     <tr>
       <td style="padding:12px 14px;border-bottom:1px solid #eae3d5;color:#6b6862;font-size:13px;font-weight:600;vertical-align:top;width:34%;">${escapeHtml(label)}</td>
@@ -66,7 +101,7 @@ export async function sendLeadEmail(
           <td style="padding:0 0 18px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0">
               <tr>
-                <td style="width:38px;height:38px;"><img src="https://smartscaletech.vercel.app/logo.png" alt="SST" width="38" height="38" style="display:block;width:38px;height:38px;border-radius:10px;" /></td>
+                <td style="width:38px;height:38px;"><img src="cid:${logoCid}" alt="SST" width="38" height="38" style="display:block;width:38px;height:38px;border-radius:10px;" /></td>
                 <td style="padding-left:10px;font-size:19px;font-weight:800;letter-spacing:-0.4px;">SmartScale<span style="color:#d9541e;">Tech</span></td>
               </tr>
             </table>
@@ -92,29 +127,26 @@ export async function sendLeadEmail(
         </tr>
       </table>
     </div>`;
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from,
-      to: [to],
-      ...(isValidEmail(replyTo) ? { reply_to: replyTo } : {}),
-      subject: `[SmartScaleTech] ${type}: ${service}${name ? ` — ${name}` : ''}`,
-      html,
-      text: [
-        `New ${type.toLowerCase()} received from the SmartScaleTech website.`,
-        '',
-        ...values.map(([label, value]) => `${label}: ${value}`),
-        `Submitted at: ${timestamp} IST`,
-      ].join('\n'),
-    }),
-  });
+  const text = [
+    `New ${type.toLowerCase()} received from the SmartScaleTech website.`,
+    '',
+    ...values.map(([label, value]) => `${label}: ${value}`),
+    `Submitted at: ${timestamp} IST`,
+  ].join('\n');
 
-  if (!response.ok) {
-    console.error('[Email Delivery Error] Resend returned status', response.status);
-    throw new Error('Email provider rejected the request');
-  }
+  await transporter.sendMail({
+    from: { name: fromName, address: from },
+    to,
+    ...(isValidEmail(replyTo) ? { replyTo } : {}),
+    subject: `[SmartScaleTech] ${type}: ${service}${name ? ` — ${name}` : ''}`,
+    html,
+    text,
+    attachments: [{
+      filename: 'sst-logo.png',
+      content: logo,
+      contentType: 'image/png',
+      contentDisposition: 'inline',
+      cid: logoCid,
+    }],
+  });
 }

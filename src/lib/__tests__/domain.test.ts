@@ -17,12 +17,31 @@ import {
 import { formatServiceRequestText } from '../leads';
 
 describe('calculateBundleTotals', () => {
+  it('uses the startup offer prices for every core service and add-on', () => {
+    assert.deepEqual(
+      SERVICE_CATALOG.map(({ standardPrice, price }) => [standardPrice, price]),
+      [
+        [299, 239], [399, 319], [299, 239], [399, 319], [199, 159],
+        [599, 479], [499, 399], [2999, 2399], [4999, 3999], [9999, 7999],
+        [3999, 3199], [4999, 3999], [3999, 3199], [7999, 6399],
+        [2999, 2399], [1999, 1599], [2999, 2399], [2499, 1999],
+      ]
+    );
+    assert.deepEqual(
+      BUNDLE_ADDONS.map(({ standardPrice, price }) => [standardPrice, price]),
+      [[499, 399], [199, 159], [499, 399]]
+    );
+  });
+
   it('returns zero totals when no services or addons are selected', () => {
     const result = calculateBundleTotals([]);
     assert.equal(result.selectedServices.length, 0);
+    assert.equal(result.standardSubtotal, 0);
     assert.equal(result.subtotal, 0);
+    assert.equal(result.standardAddonsTotal, 0);
     assert.equal(result.discountRate, 0);
     assert.equal(result.discountAmount, 0);
+    assert.equal(result.totalSavings, 0);
     assert.equal(result.addonsTotal, 0);
     assert.equal(result.finalTotal, 0);
   });
@@ -40,17 +59,21 @@ describe('calculateBundleTotals', () => {
   it('applies 10% discount for 2 distinct selected services and deduplicates repeated IDs', () => {
     const result = calculateBundleTotals(['ats-resume', 'linkedin-opt', 'ats-resume']);
     assert.equal(result.selectedServices.length, 2);
-    assert.equal(result.subtotal, 499 + 499);
+    const expectedSubtotal = 239 + 319;
+    const expectedDiscount = Math.round(expectedSubtotal * 0.1);
+    assert.equal(result.subtotal, expectedSubtotal);
     assert.equal(result.discountRate, 0.1);
-    assert.equal(result.discountAmount, Math.round(998 * 0.1));
-    assert.equal(result.finalTotal, 998 - Math.round(998 * 0.1));
+    assert.equal(result.discountAmount, expectedDiscount);
+    assert.equal(result.finalTotal, expectedSubtotal - expectedDiscount);
+    assert.equal(result.standardSubtotal, 299 + 399);
+    assert.equal(result.totalSavings, 299 + 399 - result.finalTotal);
   });
 
   it('applies 15% discount for 3 to 4 services', () => {
     const result = calculateBundleTotals(['ats-resume', 'linkedin-opt', 'naukri-indeed']);
     assert.equal(result.selectedServices.length, 3);
     assert.equal(result.discountRate, 0.15);
-    const expectedSubtotal = 499 * 3;
+    const expectedSubtotal = 239 + 319 + 239;
     const expectedDiscount = Math.round(expectedSubtotal * 0.15);
     assert.equal(result.subtotal, expectedSubtotal);
     assert.equal(result.discountAmount, expectedDiscount);
@@ -63,10 +86,11 @@ describe('calculateBundleTotals', () => {
     const result = calculateBundleTotals(ids, [addon.id, addon.id]);
     assert.equal(result.selectedServices.length, 5);
     assert.equal(result.discountRate, 0.2);
-    const expectedSubtotal = 499 + 499 + 499 + 399 + 299;
+    const expectedSubtotal = 239 + 319 + 239 + 319 + 159;
     const expectedDiscount = Math.round(expectedSubtotal * 0.2);
     assert.equal(result.addonsTotal, addon.price);
     assert.equal(result.finalTotal, expectedSubtotal - expectedDiscount + addon.price);
+    assert.equal(result.totalSavings, 299 + 399 + 299 + 399 + 199 + addon.standardPrice - result.finalTotal);
   });
 });
 

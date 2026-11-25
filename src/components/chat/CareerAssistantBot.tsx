@@ -105,27 +105,27 @@ export const CareerAssistantBot: React.FC = () => {
     }
 
     if (q.includes('ai integration') || q.includes('automation') || q.includes('chatbot')) {
-      return `Our **[AI Workflow & Chatbot Integration](/services/ai-integrations)** service starts at **₹2,999**.\n\nWe connect custom knowledge assistants, automated inquiry routing, and structured LLM APIs safely behind server-side endpoints with clean UI controls. [Discuss AI Integration](/request-service) directly!`;
+      return `Our **[AI Workflow & Chatbot Integration](/services/ai-integrations)** starts at ~~₹7,999~~ **₹6,399** (save **₹1,600**) in the Exclusive Startup Launch Offer.\n\nWe connect custom knowledge assistants, automated inquiry routing, and structured LLM APIs safely behind server-side endpoints with clean UI controls. [Discuss AI Integration](/request-service) directly!`;
     }
 
     if (q.includes('website') || q.includes('web dev') || q.includes('how much') || q.includes('cost')) {
-      return `Transparent round-figure website options:\n\n• **Portfolio Website**: **₹1,999** standalone, or **₹3,000** in the **Portfolio Launch** bundle (Website + ATS Resume + LinkedIn + GitHub).\n• **Business Website**: From **₹4,999** standalone, or **₹6,000** in the **Business Web + Technical SEO** bundle (up to 5 pages + lead capture + Search Console).\n\nExplore [Website Development](/services/web-development) or configure add-ons in the [Custom Bundle Builder](/custom-package-builder).`;
+      return `Transparent website pricing:\n\n• **Portfolio Website**: ~~₹2,999~~ **₹2,399** (save **₹600**), or **Portfolio Launch** bundle: ~~₹2,246~~ **₹1,999** (save **₹247**).\n• **Business Website**: Starting from ~~₹9,999~~ **₹7,999** (save **₹2,000**); the **Business Web** bundle is ~~₹5,498~~ **₹4,999** (save **₹499**).\n\nExplore [Website Development](/services/web-development) or configure add-ons in the [Custom Bundle Builder](/custom-package-builder).`;
     }
 
     if (q.includes('improve my resume') || q.includes('resume') || /\bats\b/i.test(q)) {
-      return `Yes. You can inspect your current draft right now in our **[Free ATS Resume & JD Checker](/free-ats-resume-checker)**.\n\nFor a full expert rewrite, **[ATS Resume Writing](/services/resume-writing)** is **₹499** (24–48h turnaround, editable Word + PDF, single-column Workday/Naukri structure) or bundled in **Career Starter (₹1,500)**.`;
+      return `Yes. You can inspect your current draft right now in our **[Free ATS Resume & JD Checker](/free-ats-resume-checker)**.\n\nFor a full expert rewrite, **[ATS Resume Writing](/services/resume-writing)** is ~~₹299~~ **₹239** (save **₹60**; 24–48h turnaround, editable Word + PDF, single-column Workday/Naukri structure) or is included in **Career Starter** (~~₹1,046~~ **₹899**, save **₹147**).`;
     }
 
     if (q.includes('bundle') || q.includes('custom') || q.includes('discount') || q.includes('package')) {
-      return `Open the 6-step **[Custom Package Builder](/custom-package-builder)** to select only what you need:\n\n• **2 Services**: Automatic **10% off**\n• **3–4 Services**: Automatic **15% off**\n• **5+ Services**: Automatic **20% off**\n\nOr pick a fixed bundle: **Career Starter (₹1,500)**, **Portfolio Launch (₹3,000)**, or **Business Web (₹6,000)**.`;
+      return `Open the 6-step **[Custom Package Builder](/custom-package-builder)** to select only what you need:\n\n• **2 Services**: Automatic **10% off**\n• **3–4 Services**: Automatic **15% off**\n• **5+ Services**: Automatic **20% off**\n\nOr pick a fixed bundle: **Career Starter** (~~₹1,046~~ ₹899, save ₹147), **Portfolio Launch** (~~₹2,246~~ ₹1,999, save ₹247), or **Business Web** (~~₹5,498~~ ₹4,999, save ₹499).`;
     }
 
     if (q.includes('linkedin') || q.includes('headline')) {
-      return `Test our **[LinkedIn Headline Generator](/linkedin-headline-generator)** free, or book a full **[LinkedIn Profile Optimization](/services/linkedin-optimization)** (₹499) delivered ready-to-paste without needing account passwords.`;
+      return `Test our **[LinkedIn Headline Generator](/linkedin-headline-generator)** free, or book a full **[LinkedIn Profile Optimization](/services/linkedin-optimization)** for ~~₹399~~ **₹319** (save **₹80**), delivered ready-to-paste without needing account passwords.`;
     }
 
     if (q.includes('final year') || q.includes('student') || q.includes('project')) {
-      return `Explore **[Final Year Projects](/final-year-projects)** (from **₹2,999**) with working source code, IEEE-aligned report documentation, presentation slides, cloud demo, and 1-on-1 viva walkthrough.`;
+      return `Explore **[Final Year Projects](/final-year-projects)**, starting from ~~₹4,999~~ **₹3,999** (save **₹1,000**), with working source code, IEEE-aligned report documentation, presentation slides, cloud demo, and 1-on-1 viva walkthrough.`;
     }
 
     return `Ask about **[Website Development](/services/web-development)**, **[ATS Resume Writing](/services/resume-writing)**, **[AI Integrations](/services/ai-integrations)**, or use our **[Custom Bundle Builder](/custom-package-builder)**.\n\nFor direct scoping, message founder Vamshi on WhatsApp (+91 90008 59695) or [Request a Proposal](/request-service).`;
@@ -236,7 +236,7 @@ export const CareerAssistantBot: React.FC = () => {
       const renderedLine = boldParts.map((part, pIdx) => {
         if (part.startsWith('**') && part.endsWith('**')) {
           return (
-            <strong key={pIdx} className="font-bold text-[#111111]">
+            <strong key={pIdx} className="font-bold text-carbon">
               {renderInlineSegment(part.slice(2, -2), `${lIdx}-${pIdx}`)}
             </strong>
           );
@@ -275,7 +275,7 @@ export const CareerAssistantBot: React.FC = () => {
               setIsOpen(true);
               setIsMinimized(false);
             }}
-            className="advisor-glow flex items-center gap-2.5 bg-[#161616] hover:bg-[#D9541E] text-white px-4 py-2.5 rounded-xl border border-white/15 transition-colors cursor-pointer"
+            className="advisor-glow flex items-center gap-2.5 bg-dark-surface hover:bg-[#D9541E] text-white px-4 py-2.5 rounded-xl border border-white/15 transition-colors cursor-pointer"
             aria-label="Open SmartScale Studio Advisor"
           >
             <MessageSquare size={16} />
@@ -289,14 +289,14 @@ export const CareerAssistantBot: React.FC = () => {
         <div
           role="dialog"
           aria-label="SmartScale Studio Advisor"
-          className={`fixed left-4 sm:left-6 bottom-16 z-50 flex flex-col bg-white rounded-2xl shadow-2xl border border-[#D8D3C9] overflow-hidden transition-all duration-200 ${
+          className={`fixed left-4 sm:left-6 bottom-16 z-50 flex flex-col bg-white rounded-2xl shadow-2xl border border-border-hairline overflow-hidden transition-all duration-200 ${
             isMinimized
               ? 'w-72 h-14'
-              : 'w-[calc(100vw-2rem)] sm:w-[400px] h-[540px] max-h-[78vh]'
+              : 'w-[calc(100vw-2rem)] sm:w-100 h-135 max-h-[78vh]'
           }`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-[#161616] text-white shrink-0">
+          <div className="flex items-center justify-between px-4 py-3 bg-dark-surface text-white shrink-0">
             <div>
               <h3 className="font-extrabold text-sm">SmartScale Studio Advisor</h3>
               {!isMinimized && (
@@ -340,7 +340,7 @@ export const CareerAssistantBot: React.FC = () => {
           {!isMinimized && (
             <>
               {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-[#F3EEE3]/45">
+              <div className="flex-1 overflow-y-auto p-4 space-y-3.5 bg-cream/45">
                 {messages.map((m) => {
                   const isUser = m.role === 'user';
                   return (
@@ -351,8 +351,8 @@ export const CareerAssistantBot: React.FC = () => {
                       <div
                         className={`max-w-[90%] rounded-xl p-3.5 text-xs sm:text-[13px] leading-relaxed ${
                           isUser
-                            ? 'bg-[#111111] text-white'
-                            : 'bg-white text-[#57534E] border border-[#D8D3C9]'
+                            ? 'bg-carbon text-white'
+                            : 'bg-white text-muted-accessible border border-border-hairline'
                         }`}
                       >
                         {isUser ? (
@@ -360,7 +360,7 @@ export const CareerAssistantBot: React.FC = () => {
                         ) : (
                           <div>
                             {renderFormattedText(m.text)}
-                            <div className="mt-2.5 pt-2 border-t border-[#EAE3D5] flex items-center justify-between text-[11px] text-[#6B6862]">
+                            <div className="mt-2.5 pt-2 border-t border-cream-subtle flex items-center justify-between text-[11px] text-muted">
                               <span>{m.timestamp}</span>
                               <div className="flex items-center gap-3">
                                 {m.isFallback && lastFailedPrompt && (
@@ -375,11 +375,11 @@ export const CareerAssistantBot: React.FC = () => {
                                 <button
                                   type="button"
                                   onClick={() => handleCopyText(m.id, m.text)}
-                                  className="hover:text-[#111111] inline-flex items-center gap-1 cursor-pointer"
+                                  className="hover:text-carbon inline-flex items-center gap-1 cursor-pointer"
                                 >
                                   {copiedId === m.id ? (
                                     <>
-                                      <Check size={11} className="text-[#16845B]" /> Copied
+                                      <Check size={11} className="text-success" /> Copied
                                     </>
                                   ) : (
                                     <>
@@ -391,7 +391,7 @@ export const CareerAssistantBot: React.FC = () => {
                                   href="https://wa.me/919000859695"
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="whatsapp-glow rounded-md px-1.5 py-1 text-[#16845B] font-semibold hover:underline inline-flex items-center gap-1"
+                                  className="whatsapp-glow rounded-md px-1.5 py-1 text-success font-semibold hover:underline inline-flex items-center gap-1"
                                 >
                                   <MessageCircle size={11} /> WhatsApp
                                 </a>
@@ -405,7 +405,7 @@ export const CareerAssistantBot: React.FC = () => {
                 })}
 
                 {isLoading && (
-                  <div className="flex items-center gap-2 text-[#57534E] text-xs py-2 px-3 bg-white border border-[#D8D3C9] rounded-xl w-fit">
+                  <div className="flex items-center gap-2 text-muted-accessible text-xs py-2 px-3 bg-white border border-border-hairline rounded-xl w-fit">
                     <span className="h-2 w-2 rounded-full bg-[#D9541E] animate-pulse" />
                     <span>Thinking...</span>
                   </div>
@@ -414,14 +414,14 @@ export const CareerAssistantBot: React.FC = () => {
               </div>
 
               {/* Quick Starter Chips */}
-              <div className="px-3.5 py-2.5 bg-[#EAE3D5]/70 border-t border-[#D8D3C9] overflow-x-auto flex gap-1.5 no-scrollbar">
+              <div className="px-3.5 py-2.5 bg-cream-subtle/70 border-t border-border-hairline overflow-x-auto flex gap-1.5 no-scrollbar">
                 {SUGGESTIONS.map((sug) => (
                   <button
                     key={sug}
                     type="button"
                     onClick={() => handleSendMessage(sug)}
                     disabled={isLoading}
-                    className="whitespace-nowrap text-[11px] font-semibold bg-white hover:bg-[#111111] hover:text-white text-[#111111] px-3 py-1.5 rounded-lg border border-[#D8D3C9] transition-colors cursor-pointer disabled:opacity-50"
+                    className="whitespace-nowrap text-[11px] font-semibold bg-white hover:bg-carbon hover:text-white text-carbon px-3 py-1.5 rounded-lg border border-border-hairline transition-colors cursor-pointer disabled:opacity-50"
                   >
                     {sug}
                   </button>
@@ -429,7 +429,7 @@ export const CareerAssistantBot: React.FC = () => {
               </div>
 
               {/* Input */}
-              <div className="p-3 bg-white border-t border-[#D8D3C9]">
+              <div className="p-3 bg-white border-t border-border-hairline">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -444,18 +444,18 @@ export const CareerAssistantBot: React.FC = () => {
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="Ask about services, pricing, or ATS tools..."
-                    className="flex-1 text-xs sm:text-sm px-3.5 py-2.5 rounded-xl bg-[#F3EEE3]/45 border border-[#D8D3C9] focus:bg-white focus:border-[#111111] focus:outline-none"
+                    className="flex-1 text-xs sm:text-sm px-3.5 py-2.5 rounded-xl bg-cream/45 border border-border-hairline focus:bg-white focus:border-carbon focus:outline-none"
                   />
                   <button
                     type="submit"
                     disabled={!inputValue.trim() || isLoading}
-                    className="p-2.5 rounded-xl bg-[#D9541E] hover:bg-[#B94414] text-white disabled:opacity-40 cursor-pointer transition-colors shrink-0"
+                    className="p-2.5 rounded-xl bg-[#D9541E] hover:bg-primary-dark text-white disabled:opacity-40 cursor-pointer transition-colors shrink-0"
                     aria-label="Send message"
                   >
                     <Send size={15} />
                   </button>
                 </form>
-                <div className="flex items-center justify-between mt-2 px-1 text-[11px] text-[#57534E]">
+                <div className="flex items-center justify-between mt-2 px-1 text-[11px] text-muted-accessible">
                   <Link
                     to="/request-service"
                     onClick={() => setIsOpen(false)}

@@ -1,132 +1,27 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Code2,
-  Brain,
-  Cloud,
-  Database,
-  CheckCircle2,
-  MessageCircle,
   ArrowRight,
+  Code2,
   FileText,
+  Mail,
+  MessageCircle,
   Presentation,
-  Terminal,
   ShieldCheck,
+  Terminal,
 } from 'lucide-react';
 import { SEO } from '../../lib/seo';
 import { Breadcrumb } from '../ui/Breadcrumb';
 import { Button } from '../ui/Button';
+import { OfferPrice } from '../ui/OfferPrice';
+import { submitProjectInquiry } from '../../lib/leads';
 
-type ProjectDomain = 'all' | 'ai-ml' | 'mern' | 'cloud-devops' | 'data';
-
-interface ProjectBlueprint {
-  id: string;
-  title: string;
-  domain: Exclude<ProjectDomain, 'all'>;
-  domainLabel: string;
-  degreeFit: string;
-  stack: string[];
-  summary: string;
-  highlights: string[];
-}
-
-const DOMAIN_FILTERS: { id: ProjectDomain; label: string }[] = [
-  { id: 'all', label: 'All Projects (8)' },
-  { id: 'ai-ml', label: 'AI & ML' },
-  { id: 'mern', label: 'Full-Stack MERN' },
-  { id: 'cloud-devops', label: 'Cloud & DevOps' },
-  { id: 'data', label: 'Data & Python' },
-];
-
-const PROJECT_CATALOG: ProjectBlueprint[] = [
-  {
-    id: 'ai-resume-screener',
-    title: 'AI-Powered Resume Screening & Skill Gap Analyzer',
-    domain: 'ai-ml',
-    domainLabel: 'AI / NLP',
-    degreeFit: 'B.Tech CSE · AI&ML · MCA',
-    stack: ['Python', 'FastAPI / Flask', 'NLP / TF-IDF', 'React'],
-    summary:
-      'Automated candidate-to-JD ranking engine using NLP keyword extraction, cosine similarity scoring, and structured gap reports.',
-    highlights: ['Live web dashboard', 'IEEE-aligned paper structure', 'Visual score analytics'],
-  },
-  {
-    id: 'medical-disease-pred',
-    title: 'Multi-Disease Early Risk Prediction Portal',
-    domain: 'ai-ml',
-    domainLabel: 'Machine Learning',
-    degreeFit: 'B.Tech · M.Tech · Data Science',
-    stack: ['Scikit-Learn', 'XGBoost', 'Streamlit / React', 'SQLite'],
-    summary:
-      'Ensemble ML pipeline predicting diabetes, heart, and kidney risk metrics with SHAP feature explainability for clinical viva demos.',
-    highlights: ['Trained model artifacts', 'Confusion matrix metrics', 'REST API inference'],
-  },
-  {
-    id: 'smart-lms-mern',
-    title: 'Full-Stack Campus Placement & Coding Portal',
-    domain: 'mern',
-    domainLabel: 'MERN Stack',
-    degreeFit: 'B.Tech · MCA · BCA',
-    stack: ['React', 'Node.js', 'Express', 'MongoDB', 'JWT'],
-    summary:
-      'Multi-role campus placement tracker with student resume uploads, eligibility filtering, and admin interview scheduling.',
-    highlights: ['Role-based authentication', 'REST API docs', 'Responsive admin dashboard'],
-  },
-  {
-    id: 'telehealth-booking',
-    title: 'Real-Time Telehealth Consultation & Pharmacy App',
-    domain: 'mern',
-    domainLabel: 'Full-Stack Web',
-    degreeFit: 'B.Tech CSE · IT · MCA',
-    stack: ['TypeScript', 'React', 'Express', 'PostgreSQL / Mongo'],
-    summary:
-      'End-to-end appointment scheduling platform with doctor availability slots, digital prescriptions, and automated reminders.',
-    highlights: ['ER & DFD diagrams ready', 'Clean modular codebase', 'Cloud demo hosted'],
-  },
-  {
-    id: 'cicd-docker-k8s',
-    title: 'Zero-Downtime Microservices CI/CD Pipeline on Cloud',
-    domain: 'cloud-devops',
-    domainLabel: 'Cloud & DevOps',
-    degreeFit: 'B.Tech · M.Tech Cloud',
-    stack: ['Docker', 'GitHub Actions', 'Nginx', 'AWS / Cloud Run'],
-    summary:
-      'Automated build, container vulnerability scan, and blue-green cloud deployment architecture with health monitoring endpoints.',
-    highlights: ['Live CI/CD workflow', 'Architecture blueprint', 'Monitoring endpoints'],
-  },
-  {
-    id: 'serverless-invoice',
-    title: 'Serverless Expense & GST Invoice Processing Engine',
-    domain: 'cloud-devops',
-    domainLabel: 'Cloud Architecture',
-    degreeFit: 'B.Tech CSE · Cloud Computing',
-    stack: ['Node.js', 'Cloud Functions', 'Cloud Storage', 'React'],
-    summary:
-      'Event-driven serverless pipeline parsing uploaded receipts, generating GST-compliant PDFs, and storing audit trails.',
-    highlights: ['Scalable serverless flow', 'Low-latency API', 'Full deployment guide'],
-  },
-  {
-    id: 'ecommerce-churn',
-    title: 'Customer Churn & Revenue Cohort Analytics Dashboard',
-    domain: 'data',
-    domainLabel: 'Data Analytics',
-    degreeFit: 'B.Tech · MBA Analytics · MCA',
-    stack: ['Python', 'Pandas', 'SQL', 'Interactive Charts'],
-    summary:
-      'RFM segmentation and churn prediction platform visualizing customer retention KPIs and seasonal sales forecasts.',
-    highlights: ['Interactive KPI filters', 'Clean CSV pipeline', 'Executive summary report'],
-  },
-  {
-    id: 'fraud-detection',
-    title: 'Real-Time UPI & Credit Card Anomaly Detection System',
-    domain: 'data',
-    domainLabel: 'Data Science',
-    degreeFit: 'B.Tech AI&DS · M.Tech',
-    stack: ['Python', 'Isolation Forest', 'FastAPI', 'React'],
-    summary:
-      'Transaction risk scoring engine flagging velocity anomalies and unusual spending patterns with explainable alert logs.',
-    highlights: ['SMOTE class balancing', 'Simulated live feed', 'ROC-AUC comparison'],
-  },
+const PROJECT_DOMAINS = [
+  'AI / Machine Learning',
+  'Full-Stack Web / MERN',
+  'Cloud & DevOps',
+  'Data Science / Python',
+  'Other',
 ];
 
 const PACKAGE_INCLUSIONS = [
@@ -153,12 +48,69 @@ const PACKAGE_INCLUSIONS = [
 ];
 
 export const FinalYearProjectsPage = () => {
-  const [activeDomain, setActiveDomain] = useState<ProjectDomain>('all');
+  const [projectRequest, setProjectRequest] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    course: '',
+    domain: '',
+    technologies: '',
+    deadline: '',
+    details: '',
+  });
+  const [showContactOptions, setShowContactOptions] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dispatchError, setDispatchError] = useState('');
+  const [emailSent, setEmailSent] = useState(false);
+  const [whatsappFallbackUrl, setWhatsappFallbackUrl] = useState('');
 
-  const filteredProjects =
-    activeDomain === 'all'
-      ? PROJECT_CATALOG
-      : PROJECT_CATALOG.filter((p) => p.domain === activeDomain);
+  const handleProjectRequest = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setShowContactOptions(true);
+    setDispatchError('');
+    setEmailSent(false);
+    setWhatsappFallbackUrl('');
+  };
+
+  const dispatchProjectRequest = async (channel: 'email' | 'whatsapp') => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setDispatchError('');
+    setEmailSent(false);
+    setWhatsappFallbackUrl('');
+    const whatsappWindow = channel === 'whatsapp' ? window.open('about:blank', '_blank') : null;
+
+    try {
+      const { whatsappUrl } = await submitProjectInquiry({
+        name: projectRequest.name.trim(),
+        email: projectRequest.email.trim(),
+        phone: projectRequest.phone.trim(),
+        course: projectRequest.course,
+        domain: projectRequest.domain,
+        technologies: projectRequest.technologies,
+        deadline: projectRequest.deadline,
+        details: projectRequest.details,
+      });
+
+      if (channel === 'whatsapp') {
+        if (whatsappWindow) {
+          whatsappWindow.opener = null;
+          whatsappWindow.location.href = whatsappUrl;
+        } else {
+          setWhatsappFallbackUrl(whatsappUrl);
+        }
+      } else {
+        setEmailSent(true);
+      }
+    } catch {
+      whatsappWindow?.close();
+      setDispatchError(
+        'We could not send your request right now. Please try again or contact us directly on WhatsApp.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="bg-[#F3EEE3] min-h-screen">
@@ -169,7 +121,6 @@ export const FinalYearProjectsPage = () => {
         path="/final-year-projects"
       />
 
-      {/* Hero Header */}
       <section className="pt-12 pb-16 sm:pt-16 border-b border-[#D8D3C9]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Breadcrumb
@@ -186,18 +137,15 @@ export const FinalYearProjectsPage = () => {
               <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#D9541E]">
                 Hitech City, Hyderabad · B.Tech, M.Tech, MCA &amp; BCA
               </p>
-
               <h1 className="text-hero-display font-extrabold text-[#111111]">
                 Final Year Projects built for real viva &amp; resume value.
               </h1>
-
               <p className="text-base sm:text-lg text-[#57534E] leading-relaxed max-w-2xl">
                 Stop buying broken copy-paste zip files. Get a clean, working build you genuinely
                 understand—complete with source code, university documentation, PPT decks, cloud
-                demo link, and 1-on-1 viva training starting at{' '}
-                <strong className="text-[#111111]">₹2,999</strong>.
+                demo link, and 1-on-1 viva training at our startup launch offer.
               </p>
-
+              <OfferPrice standardPrice={4999} offerPrice={3999} startingFrom />
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <a
                   href="https://wa.me/919000859695?text=Hello%20SmartScaleTech%2C%20I%20need%20a%20Final%20Year%20Project%20synopsis%20and%20demo%20list."
@@ -229,13 +177,12 @@ export const FinalYearProjectsPage = () => {
         </div>
       </section>
 
-      {/* Package Inclusions */}
       <section className="py-16 bg-white border-b border-[#D8D3C9]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#D9541E] mb-1">
-                Complete Package · ₹2,999
+                Complete Package · Exclusive Startup Launch Offer
               </p>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-[#111111]">
                 From Synopsis Approval to Final Viva
@@ -263,113 +210,191 @@ export const FinalYearProjectsPage = () => {
         </div>
       </section>
 
-      {/* Filterable Catalog */}
       <section className="py-16 sm:py-20 bg-[#F3EEE3]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
-            <div>
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
-                Explore Project Blueprints by Domain
-              </h2>
-              <p className="mt-2 text-sm text-[#57534E]">
-                Choose a curated topic below or send your IEEE base paper for custom execution.
-              </p>
-            </div>
-
-            <div
-              role="tablist"
-              aria-label="Filter projects by domain"
-              className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white border border-[#D8D3C9] rounded-xl self-start md:self-auto"
-            >
-              {DOMAIN_FILTERS.map((filter) => {
-                const isActive = activeDomain === filter.id;
-                return (
-                  <button
-                    key={filter.id}
-                    type="button"
-                    role="tab"
-                    aria-selected={isActive}
-                    onClick={() => setActiveDomain(filter.id)}
-                    className={`px-3.5 py-2 rounded-lg text-xs font-bold transition-colors cursor-pointer whitespace-nowrap ${
-                      isActive ? 'bg-[#111111] text-white' : 'text-[#57534E] hover:text-[#111111]'
-                    }`}
-                  >
-                    {filter.label}
-                  </button>
-                );
-              })}
-            </div>
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-8">
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#D9541E] mb-2">
+              Custom Project Inquiry
+            </p>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#111111] tracking-tight">
+              Request a project based on your requirements.
+            </h2>
+            <p className="mt-2 text-sm text-[#57534E]">
+              Tell us about your project, course, preferred technologies, and deadline. Then share
+              your completed brief directly to our team by email or WhatsApp.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredProjects.map((project) => {
-              const IconComp =
-                project.domain === 'ai-ml'
-                  ? Brain
-                  : project.domain === 'cloud-devops'
-                  ? Cloud
-                  : project.domain === 'data'
-                  ? Database
-                  : Code2;
-
-              return (
-                <div
-                  key={project.id}
-                  className="p-6 sm:p-7 rounded-2xl bg-white border border-[#D8D3C9] hover:border-[#111111]/45 transition-colors flex flex-col justify-between gap-5"
+          <form
+            onSubmit={handleProjectRequest}
+            className="rounded-2xl bg-white border border-[#D8D3C9] p-5 sm:p-8 space-y-5"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <label className="space-y-1.5">
+                <span className="block text-xs font-bold text-[#111111]">Your name *</span>
+                <input
+                  required
+                  value={projectRequest.name}
+                  onChange={(event) => {
+                    setProjectRequest({ ...projectRequest, name: event.target.value });
+                    setShowContactOptions(false);
+                    setEmailSent(false);
+                    setWhatsappFallbackUrl('');
+                  }}
+                  placeholder="Your full name"
+                  className="w-full rounded-xl border border-[#D8D3C9] bg-[#F3EEE3]/35 px-3.5 py-3 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                />
+              </label>
+              <label className="space-y-1.5">
+                <span className="block text-xs font-bold text-[#111111]">Email address *</span>
+                <input
+                  required
+                  type="email"
+                  value={projectRequest.email}
+                  onChange={(event) => {
+                    setProjectRequest({ ...projectRequest, email: event.target.value });
+                    setShowContactOptions(false);
+                    setEmailSent(false);
+                    setWhatsappFallbackUrl('');
+                  }}
+                  placeholder="you@example.com"
+                  className="w-full rounded-xl border border-[#D8D3C9] bg-[#F3EEE3]/35 px-3.5 py-3 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                />
+              </label>
+              <label className="space-y-1.5">
+                <span className="block text-xs font-bold text-[#111111]">Phone / WhatsApp number *</span>
+                <input
+                  required
+                  type="tel"
+                  value={projectRequest.phone}
+                  onChange={(event) => {
+                    setProjectRequest({ ...projectRequest, phone: event.target.value });
+                    setShowContactOptions(false);
+                    setEmailSent(false);
+                    setWhatsappFallbackUrl('');
+                  }}
+                  placeholder="+91 90000 00000"
+                  className="w-full rounded-xl border border-[#D8D3C9] bg-[#F3EEE3]/35 px-3.5 py-3 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                />
+              </label>
+              <label className="space-y-1.5">
+                <span className="block text-xs font-bold text-[#111111]">Course / degree</span>
+                <input
+                  value={projectRequest.course}
+                  onChange={(event) => {
+                    setProjectRequest({ ...projectRequest, course: event.target.value });
+                    setShowContactOptions(false);
+                  }}
+                  placeholder="e.g. B.Tech CSE, MCA"
+                  className="w-full rounded-xl border border-[#D8D3C9] bg-[#F3EEE3]/35 px-3.5 py-3 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                />
+              </label>
+              <label className="space-y-1.5">
+                <span className="block text-xs font-bold text-[#111111]">Project domain *</span>
+                <select
+                  required
+                  value={projectRequest.domain}
+                  onChange={(event) => {
+                    setProjectRequest({ ...projectRequest, domain: event.target.value });
+                    setShowContactOptions(false);
+                  }}
+                  className="w-full rounded-xl border border-[#D8D3C9] bg-[#F3EEE3]/35 px-3.5 py-3 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
                 >
-                  <div>
-                    <div className="flex items-center gap-2.5 mb-4">
-                      <div className="h-10 w-10 rounded-xl bg-[#F3EEE3] border border-[#D8D3C9] text-[#D9541E] flex items-center justify-center shrink-0">
-                        <IconComp size={19} />
-                      </div>
-                      <div className="text-xs text-[#57534E]">
-                        <span className="font-bold text-[#D9541E]">{project.domainLabel}</span>
-                        <span aria-hidden="true"> · </span>
-                        <span>{project.degreeFit}</span>
-                      </div>
-                    </div>
+                  <option value="" disabled>Select a domain</option>
+                  {PROJECT_DOMAINS.map((domain) => (
+                    <option key={domain} value={domain}>{domain}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="space-y-1.5">
+                <span className="block text-xs font-bold text-[#111111]">Preferred technologies</span>
+                <input
+                  value={projectRequest.technologies}
+                  onChange={(event) => {
+                    setProjectRequest({ ...projectRequest, technologies: event.target.value });
+                    setShowContactOptions(false);
+                  }}
+                  placeholder="e.g. Python, React, Java"
+                  className="w-full rounded-xl border border-[#D8D3C9] bg-[#F3EEE3]/35 px-3.5 py-3 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                />
+              </label>
+              <label className="space-y-1.5 sm:col-span-2">
+                <span className="block text-xs font-bold text-[#111111]">Target deadline</span>
+                <input
+                  value={projectRequest.deadline}
+                  onChange={(event) => {
+                    setProjectRequest({ ...projectRequest, deadline: event.target.value });
+                    setShowContactOptions(false);
+                  }}
+                  placeholder="e.g. 15 December or flexible"
+                  className="w-full rounded-xl border border-[#D8D3C9] bg-[#F3EEE3]/35 px-3.5 py-3 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                />
+              </label>
+              <label className="space-y-1.5 sm:col-span-2">
+                <span className="block text-xs font-bold text-[#111111]">Project requirements *</span>
+                <textarea
+                  required
+                  rows={5}
+                  value={projectRequest.details}
+                  onChange={(event) => {
+                    setProjectRequest({ ...projectRequest, details: event.target.value });
+                    setShowContactOptions(false);
+                  }}
+                  placeholder="Describe the idea, required features, university guidelines, or base paper."
+                  className="w-full resize-y rounded-xl border border-[#D8D3C9] bg-[#F3EEE3]/35 px-3.5 py-3 text-sm text-[#111111] focus:outline-none focus:ring-2 focus:ring-[#D9541E]"
+                />
+              </label>
+            </div>
 
-                    <h3 className="text-lg sm:text-xl font-extrabold text-[#111111] mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm text-[#57534E] leading-relaxed mb-4">{project.summary}</p>
-
-                    <div className="text-xs font-semibold text-[#111111] mb-4">
-                      Stack:{' '}
-                      <span className="text-[#57534E] font-normal">{project.stack.join(' · ')}</span>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      {project.highlights.map((h) => (
-                        <div key={h} className="flex items-center gap-2 text-xs text-[#57534E]">
-                          <CheckCircle2 size={14} className="text-[#16845B] shrink-0" />
-                          <span>{h}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-[#EAE3D5] flex flex-wrap items-center justify-between gap-3">
-                    <div className="tabular-nums">
-                      <span className="text-lg font-extrabold text-[#111111]">₹2,999</span>
-                      <span className="text-xs text-[#57534E] ml-1.5">Complete Package</span>
-                    </div>
-
-                    <a
-                      href={`https://wa.me/919000859695?text=${encodeURIComponent(
-                        `Hello SmartScaleTech, I want the synopsis & demo details for Final Year Project: "${project.title}".`
-                      )}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#111111] hover:bg-[#D9541E] text-white text-xs font-bold transition-colors whitespace-nowrap"
-                    >
-                      <MessageCircle size={14} /> Request Synopsis &amp; Demo
-                    </a>
-                  </div>
+            {showContactOptions ? (
+              <div className="space-y-3">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button
+                    type="button"
+                    variant="dark"
+                    className="flex-1"
+                    disabled={isSubmitting}
+                    onClick={() => dispatchProjectRequest('email')}
+                  >
+                    <Mail size={15} /> {isSubmitting ? 'Sending...' : 'Share by Email'}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    className="flex-1"
+                    disabled={isSubmitting}
+                    onClick={() => dispatchProjectRequest('whatsapp')}
+                  >
+                    <MessageCircle size={15} /> {isSubmitting ? 'Sending...' : 'Share by WhatsApp'}
+                  </Button>
                 </div>
-              );
-            })}
-          </div>
+                {emailSent && (
+                  <p role="status" className="text-sm font-semibold text-[#16845B]">
+                    Your project inquiry has been sent to our team by email.
+                  </p>
+                )}
+                {whatsappFallbackUrl && (
+                  <a
+                    href={whatsappFallbackUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm font-semibold text-[#D9541E] underline"
+                  >
+                    WhatsApp did not open automatically. Open the prepared message.
+                  </a>
+                )}
+                {dispatchError && (
+                  <p role="alert" className="text-sm font-semibold text-red-700">
+                    {dispatchError}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <Button type="submit" variant="primary">
+                Continue to Contact Options <ArrowRight size={15} />
+              </Button>
+            )}
+          </form>
         </div>
       </section>
     </main>

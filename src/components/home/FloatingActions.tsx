@@ -30,7 +30,7 @@ export const FloatingActions = () => {
         href="https://wa.me/919000859695"
         target="_blank"
         rel="noopener noreferrer"
-        className="h-10 px-4 rounded-xl bg-[#111111] hover:bg-[#D9541E] text-white flex items-center gap-2 shadow-md transition-colors text-xs font-bold whitespace-nowrap"
+        className="advisor-glow h-10 px-4 rounded-xl bg-[#111111] hover:bg-[#D9541E] text-white flex items-center gap-2 transition-colors text-xs font-bold whitespace-nowrap"
         title="Chat on WhatsApp (+91 90008 59695)"
         aria-label="Chat on WhatsApp"
       >

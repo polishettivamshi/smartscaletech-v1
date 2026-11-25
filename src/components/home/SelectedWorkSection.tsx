@@ -25,7 +25,7 @@ export const SelectedWorkSection = () => {
               to={`/work/${item.slug}`}
               className="group bg-white border border-[#D8D3C9] hover:border-[#111111] rounded-2xl overflow-hidden transition-colors flex flex-col justify-between"
             >
-              <div className="aspect-[16/10] w-full overflow-hidden border-b border-[#D8D3C9] bg-[#F3EEE3]/40">
+              <div className="aspect-video w-full overflow-hidden border-b border-[#D8D3C9] bg-[#F3EEE3]/40">
                 <img
                   src={item.image}
                   alt={item.imageAlt}

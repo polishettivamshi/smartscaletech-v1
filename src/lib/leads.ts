@@ -155,6 +155,71 @@ export async function submitLinkedInServiceRequest(data: LinkedInServiceRequestP
   return { lead, whatsappUrl, mailtoUrl, summaryText };
 }
 
+export interface ProjectInquiryPayload {
+  name: string;
+  email: string;
+  phone: string;
+  course?: string;
+  domain: string;
+  technologies?: string;
+  deadline?: string;
+  details: string;
+}
+
+export async function submitProjectInquiry(data: ProjectInquiryPayload): Promise<{
+  whatsappUrl: string;
+}> {
+  const projectBrief = [
+    `Course / Degree: ${data.course?.trim() || 'Not specified'}`,
+    `Project domain: ${data.domain}`,
+    `Preferred technologies: ${data.technologies?.trim() || 'Not specified'}`,
+    `Target deadline: ${data.deadline?.trim() || 'Not specified'}`,
+    `Project requirements: ${data.details.trim()}`,
+  ].join('\n');
+
+  const response = await fetch('/api/service-request', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: data.name.trim(),
+      email: data.email.trim(),
+      phone: data.phone.trim(),
+      service: 'Final Year Project Inquiry',
+      timeline: data.deadline?.trim(),
+      projectBrief,
+      sourcePage: '/final-year-projects',
+    }),
+  });
+  if (!response.ok) {
+    throw new Error('Project inquiry email delivery failed');
+  }
+
+  trackEvent('form_submit', {
+    service: 'Final Year Project Inquiry',
+    sourcePage: '/final-year-projects',
+    type: 'project_inquiry',
+  });
+
+  const summaryText = `🧑‍💻 *NEW PROJECT INQUIRY* — SmartScaleTech
+━━━━━━━━━━━━━━━━━━━━━
+👤 *Client Name:* ${data.name.trim()}
+📧 *Email:* ${data.email.trim()}
+📱 *WhatsApp/Phone:* ${data.phone.trim()}
+🎓 *Course / Degree:* ${data.course?.trim() || 'Not specified'}
+📋 *Project Domain:* ${data.domain}
+🛠️ *Preferred Technologies:* ${data.technologies?.trim() || 'Not specified'}
+⏱️ *Target Deadline:* ${data.deadline?.trim() || 'Not specified'}
+
+📝 *Project Requirements:*
+${data.details.trim()}
+━━━━━━━━━━━━━━━━━━━━━
+_Please reply back directly via WhatsApp or Email._`;
+
+  return {
+    whatsappUrl: `https://wa.me/${FOUNDER_WHATSAPP}?text=${encodeURIComponent(summaryText)}`,
+  };
+}
+
 export async function submitLead(leadData: Omit<Lead, 'id' | 'timestamp'>): Promise<{ lead: Lead; whatsappUrl: string }> {
   clearLegacyLeadStorage();
 

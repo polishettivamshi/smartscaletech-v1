@@ -2,7 +2,11 @@
 
 SmartScaleTech is a digital services and career solutions website for businesses, professionals, and graduates. It includes service discovery, portfolio examples, career tools, proposal forms, and the SmartScale Studio Advisor chatbot.
 
-🔗 **Live site:** [smartscaletech.vercel.app](https://smartscaletech.vercel.app)
+🔗 **Live site:** [smartscaletech](https://smartscaletech.vercel.app)
+
+## 📸 Preview
+
+![SmartScaleTech Homepage](./screenshots/homepage.png)
 
 ## Features
 
@@ -24,7 +28,7 @@ SmartScaleTech is a digital services and career solutions website for businesses
 
 ## Requirements
 
-- Node.js 18 or newer
+- Node.js 20 or newer
 - npm
 
 ## Local setup
@@ -35,16 +39,23 @@ Run commands from the project root (the directory containing `package.json`):
 npm install
 ```
 
-Copy `.env.example` to `.env` and add the server-side API keys you want to use:
+Copy `.env.example` to `.env` and add the server-side credentials you want to use:
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key
-RESEND_API_KEY=your_resend_api_key
-EMAIL_FROM="SmartScaleTech <onboarding@resend.dev>"
+MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=smartscaletechforyou@gmail.com
+MAIL_PASSWORD=your_google_app_password
+MAIL_ENCRYPTION=tls
+SMTP_USE_TLS=true
+MAIL_FROM=smartscaletechforyou@gmail.com
+MAIL_FROM_NAME="Smart Scale Tech"
 EMAIL_TO=your_inbox@example.com
 ```
 
-`GEMINI_API_KEY` enables live chatbot answers. `RESEND_API_KEY` and `EMAIL_FROM` are required for lead and service-request email delivery; `EMAIL_TO` is optional and defaults to the project inbox. The optional `VITE_UPI_ID` and `VITE_LEAD_WEBHOOK_URL` settings are documented in `.env.example`. Never commit `.env` or real API keys.
+`GEMINI_API_KEY` enables live chatbot answers. Gmail SMTP delivery requires `MAIL_USERNAME` and a Google App Password in `MAIL_PASSWORD` (not your regular Gmail password); enable 2-Step Verification on the Google account to create an App Password. `MAIL_FROM` should be the authenticated Gmail address. `EMAIL_TO` is optional and defaults to `MAIL_USERNAME`. The optional `VITE_UPI_ID` and `VITE_LEAD_WEBHOOK_URL` settings are documented in `.env.example`. Never commit `.env` or real credentials.
 
 Start the local Express server and Vite app:
 
@@ -66,7 +77,7 @@ Open [http://localhost:3000](http://localhost:3000). If email or live chatbot re
 
 ## Deployment
 
-The site supports Vercel deployment. Configure the required environment variables (`GEMINI_API_KEY`, `RESEND_API_KEY`, and `EMAIL_FROM`) in the deployment environment; set `EMAIL_TO` if submissions should go to a different inbox. Use a verified Resend sender domain for production email delivery.
+The site supports Vercel deployment. Configure `GEMINI_API_KEY` and the Gmail SMTP variables (`MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `MAIL_ENCRYPTION`, `SMTP_USE_TLS`, and `MAIL_FROM`) in the deployment environment; set `EMAIL_TO` and `MAIL_FROM_NAME` as needed. Verify outbound Gmail SMTP connectivity from the deployed function before relying on production email delivery.
 
 ## Project structure
 
@@ -79,4 +90,3 @@ The site supports Vercel deployment. Configure the required environment variable
 - `api/` — Vercel serverless API handlers and shared email template
 - `server.ts` — local Express server and API endpoints
 - `public/` — static assets, logo, and hero video
-

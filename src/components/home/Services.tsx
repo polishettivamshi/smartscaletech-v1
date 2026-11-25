@@ -7,9 +7,11 @@ import {
   CAREER_SERVICES_LIST,
   StructuredServiceEntry,
 } from '../../data/serviceCatalog';
+import { SERVICE_CATALOG } from '../../data/bundleCatalog';
 import { SectionHeading } from '../ui/SectionHeading';
 import { Dialog } from '../ui/Dialog';
 import { Button } from '../ui/Button';
+import { OfferPrice } from '../ui/OfferPrice';
 
 type TrackTab = 'all' | 'career' | 'business';
 
@@ -72,6 +74,9 @@ export const Services = () => {
         {/* Service Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {items.map((service) => (
+            (() => {
+              const offer = SERVICE_CATALOG.find((item) => item.id === service.offerServiceId);
+              return (
             <article
               key={service.slug}
               className="rounded-2xl bg-[#F3EEE3]/45 border border-[#D8D3C9] hover:border-[#111111] transition-colors flex flex-col justify-between overflow-hidden"
@@ -100,9 +105,18 @@ export const Services = () => {
                     <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#57534E]">
                       {service.categoryLabel}
                     </span>
-                    <span className="text-xs font-bold text-[#111111] tabular-nums shrink-0">
-                      {service.priceTag}
-                    </span>
+                    {offer ? (
+                      <OfferPrice
+                        standardPrice={offer.standardPrice}
+                        offerPrice={offer.price}
+                        startingFrom={service.categoryLabel !== 'Career Branding'}
+                        compact
+                      />
+                    ) : (
+                      <span className="text-xs font-bold text-[#111111] tabular-nums shrink-0">
+                        {service.priceTag}
+                      </span>
+                    )}
                   </div>
 
                   <h3 className="text-lg font-extrabold text-[#111111] leading-snug">
@@ -131,6 +145,8 @@ export const Services = () => {
                 </button>
               </div>
             </article>
+              );
+            })()
           ))}
         </div>
 
@@ -156,7 +172,7 @@ export const Services = () => {
         isOpen={Boolean(previewService)}
         onClose={() => setPreviewService(null)}
         title={previewService?.name}
-        subtitle={`${previewService?.badge} · ${previewService?.priceTag}`}
+        subtitle={previewService?.badge}
         maxWidthClass="max-w-3xl"
       >
         {previewService && (
@@ -190,9 +206,27 @@ export const Services = () => {
                   <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#57534E]">
                     Pricing &amp; Next Step
                   </p>
-                  <p className="text-sm text-[#111111] leading-relaxed">
-                    {previewService.pricingSummary}
-                  </p>
+                  {(() => {
+                    const offer = SERVICE_CATALOG.find(
+                      (item) => item.id === previewService.offerServiceId
+                    );
+                    return offer ? (
+                      <div className="space-y-2">
+                        <OfferPrice
+                          standardPrice={offer.standardPrice}
+                          offerPrice={offer.price}
+                          startingFrom={previewService.categoryLabel !== 'Career Branding'}
+                        />
+                        <p className="text-sm text-[#57534E] leading-relaxed">
+                          Exclusive launch offer · 20% OFF
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-[#111111] leading-relaxed">
+                        {previewService.pricingSummary}
+                      </p>
+                    );
+                  })()}
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-2.5">

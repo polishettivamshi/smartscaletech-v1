@@ -22,15 +22,61 @@ export interface StructuredServiceEntry {
   technologies: string[];
   pricingSummary: string;
   priceTag: string;
+  offerServiceId?: string;
+  priceOffer?: {
+    standardPrice: number | readonly [number, number];
+    offerPrice: number | readonly [number, number];
+  };
   faqs: { q: string; a: string }[];
   relatedSlugs: string[];
   previewImage: string;
   previewAlt: string;
 }
 
+const OFFER_SERVICE_BY_SLUG: Record<string, string> = {
+  'web-development': 'web-development',
+  'ui-ux-design': 'ui-ux-design',
+  'ai-integration': 'ai-integration',
+  'api-development': 'api-development',
+  'cloud-devops': 'cloud-devops',
+  'seo-growth': 'seo-growth',
+  'content-strategy': 'content-strategy',
+  'ad-campaigns': 'ad-campaigns',
+  'brand-identity': 'brand-identity',
+  'resume-writing': 'ats-resume',
+  'linkedin-optimization': 'linkedin-opt',
+  'naukri-optimization': 'naukri-indeed',
+  'indeed-optimization': 'naukri-indeed',
+  'interview-coaching': 'interview-coaching',
+  'github-audit': 'github-audit',
+  'cover-letter': 'cover-letter',
+  'salary-negotiation': 'salary-negotiation',
+  'personal-portfolio': 'portfolio-site',
+  'final-year-projects': 'final-year-project',
+  'resume-writing-freshers-hyderabad': 'ats-resume',
+  'linkedin-profile-writer-software-engineers-hyderabad': 'linkedin-opt',
+  'freelance-portfolio-website-hyderabad': 'portfolio-site',
+};
+
+const LEGACY_PRICE_OFFERS: Record<
+  string,
+  { standardPrice: number | readonly [number, number]; offerPrice: number | readonly [number, number] }
+> = {
+  'executive-resume-writing-hyderabad': { standardPrice: 2499, offerPrice: 1999 },
+  'college-placement-resume-hyderabad': {
+    standardPrice: [799, 999],
+    offerPrice: [639, 799],
+  },
+};
+
+export function getOfferServiceId(slug: string): string | undefined {
+  return OFFER_SERVICE_BY_SLUG[slug];
+}
+
 const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   'web-development': {
     slug: 'web-development',
+    offerServiceId: 'web-development',
     canonicalPath: '/services/web-development',
     legacyPath: '/web-development-hyderabad',
     vertical: 'business',
@@ -67,8 +113,8 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Launch & Handover', desc: 'Deploy to edge hosting, verify indexing, and hand over full source code.' },
     ],
     technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Python / FastAPI', 'Django / Node.js', 'Edge Cloud Hosting'],
-    pricingSummary: 'Standalone business websites start at ₹4,999, or ₹6,000 in the Business Web + Technical SEO bundle.',
-    priceTag: 'From ₹4,999',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹7,999, save ₹2,000 off ₹9,999.',
+    priceTag: 'From ₹7,999',
     faqs: servicePages['web-development-hyderabad'].faqs,
     relatedSlugs: ['ui-ux-design', 'api-development', 'seo-growth'],
     previewImage: '/assets/aistudio/web_development_8934074c.webp',
@@ -76,6 +122,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'ui-ux-design': {
     slug: 'ui-ux-design',
+    offerServiceId: 'ui-ux-design',
     canonicalPath: '/services/ui-ux-design',
     legacyPath: '/ui-ux-design-hyderabad',
     vertical: 'business',
@@ -99,8 +146,8 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
     deliverables: servicePages['ui-ux-design-hyderabad'].included,
     process: servicePages['ui-ux-design-hyderabad'].process,
     technologies: ['Figma', 'Component Tokens', 'Responsive Grids', 'Usability Audits', 'Prototyping'],
-    pricingSummary: 'UI/UX design systems start at ₹2,499 for focused interfaces, or scoped per product screen count.',
-    priceTag: 'From ₹2,499',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹3,199, save ₹800 off ₹3,999.',
+    priceTag: 'From ₹3,199',
     faqs: servicePages['ui-ux-design-hyderabad'].faqs,
     relatedSlugs: ['web-development', 'brand-identity', 'content-strategy'],
     previewImage: '/assets/aistudio/UI_UX_Design_Transformation__Before_and_After_4e26727a.webp',
@@ -108,6 +155,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'ai-integration': {
     slug: 'ai-integration',
+    offerServiceId: 'ai-integration',
     canonicalPath: '/services/ai-integration',
     vertical: 'business',
     name: 'AI Integration',
@@ -142,8 +190,8 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Testing & deploy', desc: 'Verify latency, edge cases, and mobile responsiveness.' },
     ],
     technologies: ['Gemini / LLM APIs', 'Node.js / Express', 'Python / FastAPI', 'Structured Extraction', 'React UI'],
-    pricingSummary: 'AI Chatbot & Workflow integrations start at ₹2,999 for focused web advisors, or custom scoped for multi-step pipelines.',
-    priceTag: 'From ₹2,999',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹6,399, save ₹1,600 off ₹7,999.',
+    priceTag: 'From ₹6,399',
     faqs: [
       { q: 'Will my API keys be exposed in the frontend?', a: 'Never. All model requests execute on server-side routes using protected environment configuration.' },
       { q: 'What happens if the AI API is unavailable?', a: 'We engineer clean domain fallbacks and direct WhatsApp/email handoff so visitors are never stuck.' },
@@ -154,6 +202,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'api-development': {
     slug: 'api-development',
+    offerServiceId: 'api-development',
     canonicalPath: '/services/api-development',
     vertical: 'business',
     name: 'API Development & Integration',
@@ -188,8 +237,8 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Deployment', desc: 'Deploy and hand over full repository with env template.' },
     ],
     technologies: ['FastAPI', 'Node.js / Express', 'Django', 'PostgreSQL', 'REST / GraphQL', 'OAuth & Webhooks'],
-    pricingSummary: 'API development & third-party integrations start at ₹2,499 depending on endpoint scope.',
-    priceTag: 'From ₹2,499',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹3,999, save ₹1,000 off ₹4,999.',
+    priceTag: 'From ₹3,999',
     faqs: [
       { q: 'Can you connect to an existing React or mobile frontend?', a: 'Yes, we align directly with your existing frontend payloads or refactor them cleanly together.' },
       { q: 'Can you integrate payment links, UPI, or WhatsApp notifications?', a: 'Yes, we build direct mobile-compatible UPI workflows and structured WhatsApp/email dispatch.' },
@@ -200,6 +249,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'cloud-devops': {
     slug: 'cloud-devops',
+    offerServiceId: 'cloud-devops',
     canonicalPath: '/services/cloud-devops',
     vertical: 'business',
     name: 'Cloud Deployment & DevOps',
@@ -231,8 +281,8 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Cutover & docs', desc: 'Verify HTTPS, custom domains, and hand over runbook.' },
     ],
     technologies: ['Docker', 'GitHub Actions', 'Vercel / Cloud Run', 'Nginx', 'HTTPS / DNS'],
-    pricingSummary: 'Cloud & CI/CD setup packages start at ₹1,999 one-time.',
-    priceTag: 'From ₹1,999',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹3,199, save ₹800 off ₹3,999.',
+    priceTag: 'From ₹3,199',
     faqs: [
       { q: 'Do we keep ownership of our cloud and GitHub accounts?', a: 'Always. We configure everything inside your own organization accounts.' },
     ],
@@ -242,6 +292,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'seo-growth': {
     slug: 'seo-growth',
+    offerServiceId: 'seo-growth',
     canonicalPath: '/services/seo-growth',
     vertical: 'business',
     name: 'Digital Marketing (SEO & Growth)',
@@ -273,8 +324,8 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Verification', desc: 'Validate markup and submit updated sitemap.' },
     ],
     technologies: ['Technical SEO', 'JSON-LD Schema', 'Google Search Console', 'Core Web Vitals', 'Prerendering'],
-    pricingSummary: 'Technical SEO & Search Console setup starts at ₹1,999, or included in the ₹6,000 Business Web bundle.',
-    priceTag: 'From ₹1,999',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹2,399, save ₹600 off ₹2,999.',
+    priceTag: 'From ₹2,399',
     faqs: [
       { q: 'Do you guarantee a #1 Google rank?', a: 'No ethical agency can guarantee search rankings, as algorithms depend on competition and domain history. We implement clean technical foundations so search engines index your site accurately.' },
     ],
@@ -284,6 +335,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'content-strategy': {
     slug: 'content-strategy',
+    offerServiceId: 'content-strategy',
     canonicalPath: '/services/content-strategy',
     vertical: 'business',
     name: 'Content Strategy',
@@ -313,8 +365,8 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Review & finalize', desc: 'Refine wording collaboratively until accurate.' },
     ],
     technologies: ['UX Copywriting', 'Topic Clusters', 'Editorial Calendars', 'Positioning'],
-    pricingSummary: 'Content Strategy & Landing Copy packages start at ₹1,499.',
-    priceTag: 'From ₹1,499',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹1,599, save ₹400 off ₹1,999.',
+    priceTag: 'From ₹1,599',
     faqs: [
       { q: 'Can you rewrite existing website text?', a: 'Yes, we audit your existing pages and supply structured replacement copy ready for deployment.' },
     ],
@@ -324,6 +376,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'ad-campaigns': {
     slug: 'ad-campaigns',
+    offerServiceId: 'ad-campaigns',
     canonicalPath: '/services/ad-campaigns',
     vertical: 'business',
     name: 'Ad Campaigns',
@@ -354,10 +407,10 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Launch review', desc: 'Verify delivery and hand over clear performance metrics.' },
     ],
     technologies: ['Google Ads', 'Meta Ads Manager', 'Conversion Tracking', 'Landing Optimization'],
-    pricingSummary: 'Campaign setup packages start at ₹1,999 (ad spend paid directly by client in their own account).',
-    priceTag: 'From ₹1,999',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹2,399, save ₹600 off ₹2,999 (ad spend remains separate).',
+    priceTag: 'From ₹2,399',
     faqs: [
-      { q: 'Does ₹1,999 include ad budget?', a: 'No, ₹1,999 covers campaign setup, targeting, and tracking configuration. Your ad budget is billed directly by Google or Meta inside your own ad account.' },
+      { q: 'Does the setup price include ad budget?', a: 'No, the offer price covers campaign setup, targeting, and tracking configuration. Your ad budget is billed directly by Google or Meta inside your own ad account.' },
     ],
     relatedSlugs: ['seo-growth', 'content-strategy', 'web-development'],
     previewImage: '/assets/aistudio/Ad_Campaigns_Marketing_Illustration_e01f5573.webp',
@@ -365,6 +418,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'brand-identity': {
     slug: 'brand-identity',
+    offerServiceId: 'brand-identity',
     canonicalPath: '/services/brand-identity',
     vertical: 'business',
     name: 'Brand Identity',
@@ -395,7 +449,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'System handover', desc: 'Deliver vector sources and digital brand sheet.' },
     ],
     technologies: ['Vector SVG', 'Design Tokens', 'Typography Systems', 'Social Collateral'],
-    pricingSummary: 'Logo & Brand Identity kits start at ₹1,999.',
+    pricingSummary: 'Exclusive Startup Launch Offer: starting from ₹1,999, save ₹500 off ₹2,499.',
     priceTag: 'From ₹1,999',
     faqs: [
       { q: 'Do I receive scalable SVG source files?', a: 'Yes, you receive vector SVGs alongside crisp PNG exports.' },
@@ -409,6 +463,7 @@ const BUSINESS_SLUGS: Record<string, StructuredServiceEntry> = {
 const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   'resume-writing': {
     slug: 'resume-writing',
+    offerServiceId: 'ats-resume',
     canonicalPath: '/services/resume-writing',
     legacyPath: '/ats-resume-writing-hyderabad',
     vertical: 'career',
@@ -429,7 +484,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
     process: servicePages['ats-resume-writing-hyderabad'].process,
     technologies: ['Workday & Taleo Safe', 'Naukri Parsing', 'STAR Bullet Architecture', 'Editable Word + PDF'],
     pricingSummary: servicePages['ats-resume-writing-hyderabad'].pricing,
-    priceTag: 'From ₹499',
+    priceTag: 'From ₹239',
     faqs: servicePages['ats-resume-writing-hyderabad'].faqs,
     relatedSlugs: ['linkedin-optimization', 'naukri-optimization', 'cover-letter'],
     previewImage: '/assets/aistudio/Resume_Optimization__Before___After_38faafe1.webp',
@@ -437,6 +492,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'linkedin-optimization': {
     slug: 'linkedin-optimization',
+    offerServiceId: 'linkedin-opt',
     canonicalPath: '/services/linkedin-optimization',
     legacyPath: '/linkedin-profile-optimization-hyderabad',
     vertical: 'career',
@@ -457,7 +513,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
     process: servicePages['linkedin-profile-optimization-hyderabad'].process,
     technologies: ['LinkedIn Search SEO', '220-Char Headlines', 'Skills Matrix', 'Custom Banner'],
     pricingSummary: servicePages['linkedin-profile-optimization-hyderabad'].pricing,
-    priceTag: 'From ₹499',
+    priceTag: 'From ₹319',
     faqs: servicePages['linkedin-profile-optimization-hyderabad'].faqs,
     relatedSlugs: ['resume-writing', 'naukri-optimization', 'personal-portfolio'],
     previewImage: '/assets/aistudio/LinkedIn_Profile_Transformation__Before_and_After_970bdafd.webp',
@@ -465,6 +521,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'naukri-optimization': {
     slug: 'naukri-optimization',
+    offerServiceId: 'naukri-indeed',
     canonicalPath: '/services/naukri-optimization',
     vertical: 'career',
     name: 'Naukri Profile Optimization',
@@ -496,8 +553,8 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Apply & verify', desc: 'Update your account cleanly with our post-update check.' },
     ],
     technologies: ['Naukri Recruiter Search', 'IT Skills Matrix', 'Keyword Alignment'],
-    pricingSummary: 'Naukri Profile Optimization is ₹499 standalone, or included inside the ₹1,500 Career Starter bundle.',
-    priceTag: '₹499',
+    pricingSummary: 'Exclusive Startup Launch Offer: ₹239, save ₹60 off ₹299.',
+    priceTag: '₹239',
     faqs: [
       { q: 'Do you need my Naukri password?', a: 'Never. We send exact copy and section screenshots so you remain in full control of your account.' },
     ],
@@ -507,6 +564,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'indeed-optimization': {
     slug: 'indeed-optimization',
+    offerServiceId: 'naukri-indeed',
     canonicalPath: '/services/indeed-optimization',
     vertical: 'career',
     name: 'Indeed Profile Optimization',
@@ -537,8 +595,8 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Publish & verify', desc: 'Apply cleanly with visibility checklist.' },
     ],
     technologies: ['Indeed Employer Search', 'Role Keyword Taxonomy', 'STAR Summaries'],
-    pricingSummary: 'Indeed Profile Optimization is ₹499 standalone, or eligible for 10%–20% bundle discounts.',
-    priceTag: '₹499',
+    pricingSummary: 'Exclusive Startup Launch Offer: ₹239, save ₹60 off ₹299.',
+    priceTag: '₹239',
     faqs: [
       { q: 'Do I share my Indeed login credentials?', a: 'No. We send structured text and exact update steps so your account stays completely private.' },
     ],
@@ -548,6 +606,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'interview-coaching': {
     slug: 'interview-coaching',
+    offerServiceId: 'interview-coaching',
     canonicalPath: '/services/interview-coaching',
     vertical: 'career',
     name: '1-on-1 Interview Coaching',
@@ -578,8 +637,8 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Structured debrief', desc: 'Receive written notes on strongest and weakest answers.' },
     ],
     technologies: ['Technical Mock Rounds', 'Behavioral STAR Answers', 'Project Defense Prep'],
-    pricingSummary: '1-on-1 Mock Interview Coaching is ₹499 per session.',
-    priceTag: '₹499',
+    pricingSummary: 'Exclusive Startup Launch Offer: ₹479, save ₹120 off ₹599 per session.',
+    priceTag: '₹479',
     faqs: [
       { q: 'Is interview coaching suitable for freshers?', a: 'Yes, especially for defending final year projects, internships, and HR screening rounds.' },
     ],
@@ -589,6 +648,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'github-audit': {
     slug: 'github-audit',
+    offerServiceId: 'github-audit',
     canonicalPath: '/services/github-audit',
     vertical: 'career',
     name: 'GitHub & Portfolio Audit',
@@ -619,8 +679,8 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Push & verify', desc: 'Publish cleanly to your profile and verify rendering.' },
     ],
     technologies: ['GitHub Markdown', 'Stack Badges', 'Repository Docs', 'Pinned Highlights'],
-    pricingSummary: 'GitHub Profile README & Repo Audit is ₹399 standalone, or included in Career Starter (₹1,500) and Portfolio Launch (₹3,000).',
-    priceTag: '₹399',
+    pricingSummary: 'Exclusive Startup Launch Offer: ₹319, save ₹80 off ₹399.',
+    priceTag: '₹319',
     faqs: [
       { q: 'Do you need my GitHub password?', a: 'Never. We deliver the Markdown files and exact checklist so you push changes yourself.' },
     ],
@@ -630,6 +690,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'cover-letter': {
     slug: 'cover-letter',
+    offerServiceId: 'cover-letter',
     canonicalPath: '/services/cover-letter',
     vertical: 'career',
     name: 'Cover Letter Mastery',
@@ -659,8 +720,8 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Word & PDF delivery', desc: 'Receive editable files with one quick refinement round.' },
     ],
     technologies: ['Editable Word + PDF', 'Cold Outreach Copy', 'STAR Storytelling'],
-    pricingSummary: 'Role-Tailored Cover Letter Mastery is ₹299 standalone, or bundled with 10%–20% discount in our Package Builder.',
-    priceTag: '₹299',
+    pricingSummary: 'Exclusive Startup Launch Offer: ₹159, save ₹40 off ₹199.',
+    priceTag: '₹159',
     faqs: [
       { q: 'Can I reuse the cover letter for multiple companies?', a: 'Yes, we structure modular hook brackets so you can adapt it cleanly to each company in two minutes.' },
     ],
@@ -670,6 +731,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'salary-negotiation': {
     slug: 'salary-negotiation',
+    offerServiceId: 'salary-negotiation',
     canonicalPath: '/services/salary-negotiation',
     vertical: 'career',
     name: 'Salary Negotiation Tips',
@@ -699,8 +761,8 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
       { title: 'Written scripts', desc: 'Leave with exact email copy ready to send.' },
     ],
     technologies: ['CTC Breakdown', 'HR Scripts', '1-on-1 Coaching'],
-    pricingSummary: 'Salary Negotiation Strategy is ₹499 per session.',
-    priceTag: '₹499',
+    pricingSummary: 'Exclusive Startup Launch Offer: ₹399, save ₹100 off ₹499 per session.',
+    priceTag: '₹399',
     faqs: [
       { q: 'Can negotiating get my offer revoked?', a: 'When approached respectfully with market context and gratitude, professional counter-offers rarely risk an offer—we coach you on calm, collaborative phrasing.' },
     ],
@@ -710,6 +772,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'personal-portfolio': {
     slug: 'personal-portfolio',
+    offerServiceId: 'portfolio-site',
     canonicalPath: '/services/personal-portfolio',
     legacyPath: '/portfolio-website-hyderabad',
     vertical: 'career',
@@ -729,7 +792,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
     process: servicePages['portfolio-website-hyderabad'].process,
     technologies: ['React', 'TypeScript', 'Tailwind CSS', 'Vercel / GitHub Pages', 'SEO Schema'],
     pricingSummary: servicePages['portfolio-website-hyderabad'].pricing,
-    priceTag: 'From ₹1,999',
+    priceTag: 'From ₹2,399',
     faqs: servicePages['portfolio-website-hyderabad'].faqs,
     relatedSlugs: ['github-audit', 'resume-writing', 'final-year-projects'],
     previewImage: '/assets/aistudio/Personal_Portfolio_Transformation_before_after_cbbb2d79.webp',
@@ -737,6 +800,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
   },
   'final-year-projects': {
     slug: 'final-year-projects',
+    offerServiceId: 'final-year-project',
     canonicalPath: '/services/final-year-projects',
     legacyPath: '/final-year-projects-hyderabad',
     vertical: 'career',
@@ -756,7 +820,7 @@ const CAREER_SLUGS: Record<string, StructuredServiceEntry> = {
     process: servicePages['final-year-projects-hyderabad'].process,
     technologies: ['Python / FastAPI / Flask', 'React / MERN', 'AI & Machine Learning', 'Cloud / Docker', 'SQL'],
     pricingSummary: servicePages['final-year-projects-hyderabad'].pricing,
-    priceTag: 'From ₹2,999',
+    priceTag: 'From ₹3,999',
     faqs: servicePages['final-year-projects-hyderabad'].faqs,
     relatedSlugs: ['personal-portfolio', 'resume-writing', 'github-audit'],
     previewImage: '/assets/aistudio/Final_Year_Projects__Ideas_in_Code_c262fb23.webp',
@@ -816,6 +880,8 @@ export function resolveServiceEntry(slug: string): StructuredServiceEntry | unde
     deliverables: legacyPage.included,
     process: legacyPage.process,
     technologies: ['ATS Safe Formatting', 'Keyword Research', 'Role Positioning'],
+    offerServiceId: getOfferServiceId(slug),
+    priceOffer: LEGACY_PRICE_OFFERS[slug],
     pricingSummary: legacyPage.pricing,
     priceTag: 'Transparent Pricing',
     faqs: legacyPage.faqs,

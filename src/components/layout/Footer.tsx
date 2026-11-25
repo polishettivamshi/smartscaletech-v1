@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
-import { Linkedin, Instagram, Github, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
+import { Linkedin, Instagram, Youtube, Send, MessageCircle, Mail, Phone, MapPin } from 'lucide-react';
 
 export const Footer = () => {
   return (
-    <footer id="contact" className="bg-[#EAE3D5]/70 border-t border-[#D8D3C9] pt-16 pb-10 text-[#111111]">
+    <footer id="contact" className="bg-cream-subtle/70 border-t border-border-hairline pt-16 pb-10 text-carbon">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-14 border-b border-[#D8D3C9]">
+        <div className="grid grid-cols-1 md:grid-cols-14 gap-10 lg:gap-12 xl:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,1.1fr)_minmax(0,0.85fr)_minmax(0,1.7fr)] xl:gap-4 pb-14 border-b border-border-hairline">
           {/* Brand Summary */}
-          <div className="md:col-span-4 space-y-5">
+          <div className="md:col-span-4 xl:col-span-1 space-y-5">
             <Link to="/" className="inline-flex items-center gap-2.5">
               <img
                 src="/logo.png"
@@ -15,12 +15,12 @@ export const Footer = () => {
                 aria-hidden="true"
                 className="h-9 w-9 rounded-lg object-cover"
               />
-              <span className="text-xl font-display font-extrabold tracking-tight text-[#111111]">
+              <span className="text-xl font-display font-extrabold tracking-tight text-carbon">
                 SmartScale<span className="text-[#D9541E]">Tech</span>
               </span>
             </Link>
 
-            <p className="text-sm text-[#57534E] leading-relaxed max-w-sm">
+            <p className="text-sm text-muted-accessible leading-relaxed max-w-sm">
               Smart Scale Tech (SST / SmartScaleTech) is a Hitech City, Hyderabad studio building custom websites, web applications, AI integrations, ATS resumes, and career assets for businesses, professionals, and graduates across India.
             </p>
 
@@ -29,7 +29,8 @@ export const Footer = () => {
               {[
                 { Icon: Linkedin, name: 'LinkedIn', url: 'https://www.linkedin.com/company/smartscale-tech' },
                 { Icon: Instagram, name: 'Instagram', url: 'https://www.instagram.com/smartscale.tech' },
-                { Icon: Github, name: 'GitHub', url: 'https://github.com/smartscaletech' },
+                { Icon: Youtube, name: 'YouTube', url: 'https://www.youtube.com/@smartscaletech' },
+                { Icon: Send, name: 'Telegram', url: 'https://t.me/+KfP2vR94KLg2YTY1' },
                 { Icon: MessageCircle, name: 'WhatsApp', url: 'https://whatsapp.com/channel/0029VbCFJRKJJhzXxOaL7g28' },
               ].map((item) => (
                 <a
@@ -39,15 +40,15 @@ export const Footer = () => {
                   rel="noopener noreferrer"
                   aria-label={item.name}
                   title={item.name}
-                  className="group relative h-10 w-10 rounded-xl bg-white border border-[#D8D3C9] flex items-center justify-center text-[#57534E] hover:text-[#D9541E] hover:border-[#111111] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9541E]"
+                  className="group relative h-10 w-10 rounded-xl bg-white border border-border-hairline flex items-center justify-center text-muted-accessible hover:text-[#D9541E] hover:border-carbon transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D9541E]"
                 >
                   <item.Icon size={17} />
                   <span
                     role="tooltip"
-                    className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-[#111111] px-2.5 py-1 text-[11px] font-semibold text-white shadow-md opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:translate-y-0 transition-all duration-150 z-20"
+                    className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-carbon px-2.5 py-1 text-[11px] font-semibold text-white shadow-md opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 group-focus-visible:opacity-100 group-focus-visible:translate-y-0 transition-all duration-150 z-20"
                   >
                     {item.name}
-                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-2 w-2 rotate-45 bg-[#111111]" />
+                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 h-2 w-2 rotate-45 bg-carbon" />
                   </span>
                 </a>
               ))}
@@ -55,8 +56,8 @@ export const Footer = () => {
           </div>
 
           {/* Column 1: Business Solutions */}
-          <div className="md:col-span-2">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#111111] mb-4">
+          <div className="md:col-span-2 xl:col-span-1">
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-carbon mb-4">
               Business
             </h4>
             <ul className="space-y-2.5 text-sm">
@@ -74,7 +75,7 @@ export const Footer = () => {
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="text-[#57534E] hover:text-[#D9541E] transition-colors"
+                    className="text-muted-accessible hover:text-[#D9541E] transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -83,10 +84,10 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 2: Career Solutions */}
-          <div className="md:col-span-2">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#111111] mb-4">
-              Career
+          {/* Column 2: Services Solutions */}
+          <div className="md:col-span-2 xl:col-span-1">
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-carbon mb-4">
+              Services
             </h4>
             <ul className="space-y-2.5 text-sm">
               {[
@@ -104,7 +105,7 @@ export const Footer = () => {
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="text-[#57534E] hover:text-[#D9541E] transition-colors"
+                    className="text-muted-accessible hover:text-[#D9541E] transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -114,8 +115,8 @@ export const Footer = () => {
           </div>
 
           {/* Column 3: Free Tools & Studio */}
-          <div className="md:col-span-2">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#111111] mb-4">
+          <div className="md:col-span-2 xl:col-span-1">
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-carbon mb-4">
               Tools &amp; Studio
             </h4>
             <ul className="space-y-2.5 text-sm">
@@ -132,7 +133,7 @@ export const Footer = () => {
                 <li key={item.to}>
                   <Link
                     to={item.to}
-                    className="text-[#57534E] hover:text-[#D9541E] transition-colors"
+                    className="text-muted-accessible hover:text-[#D9541E] transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -141,39 +142,62 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 4: Direct Contact */}
-          <div className="md:col-span-2">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#111111] mb-4">
+          {/* Column 4: Products */}
+          <div className="md:col-span-2 xl:col-span-1">
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-carbon mb-4">
+              Our Products
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              {[
+                { label: 'MDR Free Split', url: 'https://mdr-free-split.vercel.app/' },
+              ].map((item) => (
+                <li key={item.url}>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-accessible hover:text-[#D9541E] transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 5: Direct Contact */}
+          <div className="md:col-span-2 xl:col-span-1">
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-carbon mb-4">
               Contact
             </h4>
-            <ul className="space-y-3 text-xs sm:text-sm text-[#57534E]">
-              <li className="flex items-start gap-2.5">
+            <ul className="space-y-3 text-xs sm:text-sm text-muted-accessible">
+              <li className="flex items-start gap-2.5 xl:whitespace-nowrap">
                 <Mail size={15} className="text-[#D9541E] shrink-0 mt-0.5" />
                 <a
                   href="mailto:smartscaletechforyou@gmail.com"
-                  className="hover:text-[#111111] break-all"
+                  className="hover:text-carbon break-all xl:break-normal"
                 >
                   smartscaletechforyou@gmail.com
                 </a>
               </li>
-              <li className="flex items-start gap-2.5">
+              <li className="flex items-start gap-2.5 xl:whitespace-nowrap">
                 <Phone size={15} className="text-[#D9541E] shrink-0 mt-0.5" />
-                <a href="tel:+919000859695" className="hover:text-[#111111] tabular-nums">
+                <a href="tel:+919000859695" className="hover:text-carbon tabular-nums">
                   +91 90008 59695
                 </a>
               </li>
-              <li className="flex items-start gap-2.5">
+              <li className="flex items-start gap-2.5 xl:whitespace-nowrap">
                 <MapPin size={15} className="text-[#D9541E] shrink-0 mt-0.5" />
                 <span>Hitech City, Hyderabad, Telangana, India</span>
               </li>
-              <li className="pt-1 text-xs font-semibold text-[#111111]">
+              <li className="pt-1 text-xs font-semibold text-carbon xl:whitespace-nowrap">
                 Mon–Sat · 9:00 AM – 9:00 PM IST
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#57534E]">
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-accessible">
           <p>&copy; {new Date().getFullYear()} Smart Scale Tech (SmartScaleTech). All rights reserved.</p>
 
           <div className="flex flex-wrap items-center justify-center gap-5">
@@ -183,18 +207,18 @@ export const Footer = () => {
                 href="https://www.linkedin.com/in/polishettivamshi/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-[#111111] hover:text-[#D9541E]"
+                className="font-semibold text-carbon hover:text-[#D9541E]"
               >
                 Vamshi Polishetti
               </a>
             </span>
-            <Link to="/privacy-policy" className="hover:text-[#111111]">
+            <Link to="/privacy-policy" className="hover:text-carbon">
               Privacy Policy
             </Link>
-            <Link to="/terms-of-service" className="hover:text-[#111111]">
+            <Link to="/terms-of-service" className="hover:text-carbon">
               Terms of Service
             </Link>
-            <Link to="/refund-policy" className="hover:text-[#111111]">
+            <Link to="/refund-policy" className="hover:text-carbon">
               Refund Policy
             </Link>
           </div>

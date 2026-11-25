@@ -5,6 +5,7 @@ export interface CatalogService {
   name: string;
   track: 'job-seekers' | 'business';
   category: string;
+  standardPrice: number;
   price: number;
   turnaround: string;
   desc: string;
@@ -16,7 +17,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'ATS Resume Writing (Word + PDF)',
     track: 'job-seekers',
     category: 'Career Branding',
-    price: 499,
+    standardPrice: 299,
+    price: 239,
     turnaround: '24–48 hrs',
     desc: 'Single-column ATS format structured for Workday, Taleo, and Naukri.',
   },
@@ -25,7 +27,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'LinkedIn Profile Optimization + Custom Banner',
     track: 'job-seekers',
     category: 'Career Branding',
-    price: 499,
+    standardPrice: 399,
+    price: 319,
     turnaround: '24–48 hrs',
     desc: 'Keyword headline, About story rewrite, skills & custom header banner.',
   },
@@ -34,7 +37,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Naukri & Indeed Profile Optimization',
     track: 'job-seekers',
     category: 'Career Branding',
-    price: 499,
+    standardPrice: 299,
+    price: 239,
     turnaround: '24 hrs',
     desc: 'Complete job portal keyword tuning and career preference alignment.',
   },
@@ -43,7 +47,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'GitHub Profile README & Repo Audit',
     track: 'job-seekers',
     category: 'Career Branding',
-    price: 399,
+    standardPrice: 399,
+    price: 319,
     turnaround: '24 hrs',
     desc: 'Custom developer README, stack badges & pinned repository polish.',
   },
@@ -52,7 +57,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Role-Tailored Cover Letter Mastery',
     track: 'job-seekers',
     category: 'Career Branding',
-    price: 299,
+    standardPrice: 199,
+    price: 159,
     turnaround: '24 hrs',
     desc: 'Persuasive editable cover letter aligned to your target role.',
   },
@@ -61,7 +67,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: '1-on-1 Mock Interview Coaching',
     track: 'job-seekers',
     category: 'Career Branding',
-    price: 499,
+    standardPrice: 599,
+    price: 479,
     turnaround: 'Scheduled 45 min',
     desc: 'Technical/HR mock round with personalized feedback & Q&A notes.',
   },
@@ -70,7 +77,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Salary & Offer Negotiation Strategy',
     track: 'job-seekers',
     category: 'Career Branding',
-    price: 499,
+    standardPrice: 499,
+    price: 399,
     turnaround: 'Scheduled 30 min',
     desc: 'Market CTC benchmarking and counter-offer email/call scripts.',
   },
@@ -79,7 +87,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Custom Personal Portfolio Website',
     track: 'job-seekers',
     category: 'Tech & Projects',
-    price: 1999,
+    standardPrice: 2999,
+    price: 2399,
     turnaround: '3–4 days',
     desc: 'Responsive React portfolio deployed on cloud hosting with source code.',
   },
@@ -88,7 +97,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Final Year Project (Code + Report + Viva Prep)',
     track: 'job-seekers',
     category: 'Tech & Projects',
-    price: 2999,
+    standardPrice: 4999,
+    price: 3999,
     turnaround: '4–7 days',
     desc: 'End-to-end B.Tech / M.Tech / MCA build in Python, Java, MERN or AI/ML.',
   },
@@ -97,7 +107,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Custom Business / SaaS Website',
     track: 'business',
     category: 'Web & Engineering',
-    price: 4999,
+    standardPrice: 9999,
+    price: 7999,
     turnaround: '5–7 days',
     desc: 'Responsive website with WhatsApp lead capture, schema & hosting setup.',
   },
@@ -106,7 +117,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'UI/UX Design & Wireframe System',
     track: 'business',
     category: 'Web & Engineering',
-    price: 2499,
+    standardPrice: 3999,
+    price: 3199,
     turnaround: '3–5 days',
     desc: 'Conversion-focused UI screens, components & mobile/desktop layouts.',
   },
@@ -115,7 +127,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'API Development & 3rd-Party Integration',
     track: 'business',
     category: 'Web & Engineering',
-    price: 2499,
+    standardPrice: 4999,
+    price: 3999,
     turnaround: '3–5 days',
     desc: 'FastAPI / Node / Django REST APIs, payments, webhooks & database integration.',
   },
@@ -124,7 +137,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Cloud Deployment, Docker & CI/CD Setup',
     track: 'business',
     category: 'Web & Engineering',
-    price: 1999,
+    standardPrice: 3999,
+    price: 3199,
     turnaround: '2–3 days',
     desc: 'Docker containers, GitHub Actions CI/CD, SSL domain routing & uptime setup.',
   },
@@ -133,7 +147,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'AI Chatbot & Workflow Automation Integration',
     track: 'business',
     category: 'Web & Engineering',
-    price: 2999,
+    standardPrice: 7999,
+    price: 6399,
     turnaround: '3–5 days',
     desc: 'Custom AI assistant or document workflow integrated into your website/CRM.',
   },
@@ -142,7 +157,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Technical SEO, Schema & Search Console Setup',
     track: 'business',
     category: 'Marketing & Brand',
-    price: 1999,
+    standardPrice: 2999,
+    price: 2399,
     turnaround: '2–3 days',
     desc: 'Structured JSON-LD schema, sitemap indexing & meta optimization.',
   },
@@ -151,7 +167,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'SEO Content Strategy & Landing Copy',
     track: 'business',
     category: 'Marketing & Brand',
-    price: 1499,
+    standardPrice: 1999,
+    price: 1599,
     turnaround: '2–3 days',
     desc: 'Conversion-focused landing page copy plus 30-day keyword content roadmap.',
   },
@@ -160,7 +177,8 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Google & Meta Ad Campaign Setup',
     track: 'business',
     category: 'Marketing & Brand',
-    price: 1999,
+    standardPrice: 2999,
+    price: 2399,
     turnaround: '2–3 days',
     desc: 'Targeted lead-generation ad setup with conversion & pixel tracking.',
   },
@@ -169,6 +187,7 @@ export const SERVICE_CATALOG: CatalogService[] = [
     name: 'Logo & Brand Identity Design Kit',
     track: 'business',
     category: 'Marketing & Brand',
+    standardPrice: 2499,
     price: 1999,
     turnaround: '2–4 days',
     desc: 'Custom logo suite, color palette, typography & social media banners.',
@@ -176,17 +195,20 @@ export const SERVICE_CATALOG: CatalogService[] = [
 ];
 
 export const BUNDLE_ADDONS = [
-  { id: 'rush-24h', name: 'Express Priority Turnaround (24-Hour Priority)', price: 399 },
-  { id: 'extra-jd-tailoring', name: 'Additional Role/JD Resume Variant', price: 249 },
-  { id: 'domain-dns-setup', name: 'Custom Domain & DNS Configuration Support', price: 299 },
+  { id: 'rush-24h', name: 'Express Priority Turnaround (24-Hour Priority)', standardPrice: 499, price: 399 },
+  { id: 'extra-jd-tailoring', name: 'Additional Role/JD Resume Variant', standardPrice: 199, price: 159 },
+  { id: 'domain-dns-setup', name: 'Custom Domain & DNS Configuration Support', standardPrice: 499, price: 399 },
 ] as const;
 
 export interface BundleCalculation {
   selectedServices: CatalogService[];
+  standardSubtotal: number;
   subtotal: number;
+  standardAddonsTotal: number;
   addonsTotal: number;
   discountRate: number;
   discountAmount: number;
+  totalSavings: number;
   finalTotal: number;
 }
 
@@ -196,6 +218,7 @@ export function calculateBundleTotals(
 ): BundleCalculation {
   const uniqueServiceIds = Array.from(new Set(selectedServiceIds));
   const selectedServices = SERVICE_CATALOG.filter((s) => uniqueServiceIds.includes(s.id));
+  const standardSubtotal = selectedServices.reduce((sum, s) => sum + s.standardPrice, 0);
   const subtotal = selectedServices.reduce((sum, s) => sum + s.price, 0);
 
   let discountRate = 0;
@@ -206,17 +229,23 @@ export function calculateBundleTotals(
   const discountAmount = Math.round(subtotal * discountRate);
 
   const uniqueAddonIds = Array.from(new Set(selectedAddonIds));
-  const addonsTotal = BUNDLE_ADDONS.filter((a) => uniqueAddonIds.includes(a.id)).reduce(
+  const selectedAddons = BUNDLE_ADDONS.filter((a) => uniqueAddonIds.includes(a.id));
+  const standardAddonsTotal = selectedAddons.reduce((sum, a) => sum + a.standardPrice, 0);
+  const addonsTotal = selectedAddons.reduce(
     (sum, a) => sum + a.price,
     0
   );
+  const finalTotal = subtotal - discountAmount + addonsTotal;
 
   return {
     selectedServices,
+    standardSubtotal,
     subtotal,
+    standardAddonsTotal,
     addonsTotal,
     discountRate,
     discountAmount,
-    finalTotal: subtotal - discountAmount + addonsTotal,
+    totalSavings: standardSubtotal + standardAddonsTotal - finalTotal,
+    finalTotal,
   };
 }

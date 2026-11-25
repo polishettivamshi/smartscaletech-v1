@@ -11,6 +11,8 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 import { BUSINESS_SERVICES_LIST, CAREER_SERVICES_LIST } from '../../data/serviceCatalog';
+import { SERVICE_CATALOG } from '../../data/bundleCatalog';
+import { OfferPrice } from '../ui/OfferPrice';
 
 const FREE_TOOL_LINKS = [
   {
@@ -139,6 +141,11 @@ export const Navbar = () => {
                     <ul className="space-y-1.5">
                       {BUSINESS_SERVICES_LIST.map((srv) => (
                         <li key={srv.slug}>
+                          {(() => {
+                            const offer = SERVICE_CATALOG.find(
+                              (item) => item.id === srv.offerServiceId
+                            );
+                            return (
                           <Link
                             to={srv.canonicalPath}
                             onClick={() => setOpenDropdown(null)}
@@ -147,10 +154,21 @@ export const Navbar = () => {
                             <span className="text-sm font-semibold text-[#111111] group-hover:text-[#D9541E]">
                               {srv.name}
                             </span>
-                            <span className="text-[11px] font-medium text-[#57534E] tabular-nums">
-                              {srv.priceTag}
-                            </span>
+                            {offer ? (
+                              <OfferPrice
+                                standardPrice={offer.standardPrice}
+                                offerPrice={offer.price}
+                                compact
+                                startingFrom
+                              />
+                            ) : (
+                              <span className="text-[11px] font-medium text-[#57534E] tabular-nums">
+                                {srv.priceTag}
+                              </span>
+                            )}
                           </Link>
+                            );
+                          })()}
                         </li>
                       ))}
                     </ul>
@@ -164,6 +182,11 @@ export const Navbar = () => {
                       <ul className="space-y-1.5">
                         {CAREER_SERVICES_LIST.map((srv) => (
                           <li key={srv.slug}>
+                            {(() => {
+                              const offer = SERVICE_CATALOG.find(
+                                (item) => item.id === srv.offerServiceId
+                              );
+                              return (
                             <Link
                               to={srv.canonicalPath}
                               onClick={() => setOpenDropdown(null)}
@@ -172,10 +195,20 @@ export const Navbar = () => {
                               <span className="text-sm font-semibold text-[#111111] group-hover:text-[#D9541E]">
                                 {srv.name}
                               </span>
-                              <span className="text-[11px] font-medium text-[#57534E] tabular-nums">
-                                {srv.priceTag}
-                              </span>
+                              {offer ? (
+                                <OfferPrice
+                                  standardPrice={offer.standardPrice}
+                                  offerPrice={offer.price}
+                                  compact
+                                />
+                              ) : (
+                                <span className="text-[11px] font-medium text-[#57534E] tabular-nums">
+                                  {srv.priceTag}
+                                </span>
+                              )}
                             </Link>
+                              );
+                            })()}
                           </li>
                         ))}
                       </ul>

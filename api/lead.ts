@@ -1,4 +1,4 @@
-import { cleanField, isValidEmail, sendLeadEmail } from './_lib/resend';
+import { cleanField, isValidEmail, sendLeadEmail } from './_lib/mailer';
 
 interface ApiRequest {
   method?: string;
